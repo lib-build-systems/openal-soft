@@ -16,9 +16,9 @@ Yes please! I already have my hands full on creating a consistent cross-platform
 # openal-soft
 Added CMakeLists.txt file for openal-soft version 1.19
 * Default installation paths:
-  * <CMAKE_INSTALL_PREFIX>/include/openal-soft (.h, .hpp)
+  * <CMAKE_INSTALL_PREFIX>/include/openal (.h, .hpp)
   * <CMAKE_INSTALL_PREFIX>/share/man (.1, .3, .5)
   * <CMAKE_INSTALL_PREFIX>/bin (.exe, .dll)
   * <CMAKE_INSTALL_PREFIX>/lib (.so, .lib)
-  * <CMAKE_INSTALL_PREFIX>/lib/cmake/openal-soft (.cmake, .pc) 
+  * <CMAKE_INSTALL_PREFIX>/lib/cmake/openal (.cmake, .pc) 
   
