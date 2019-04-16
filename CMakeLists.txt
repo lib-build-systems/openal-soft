@@ -1473,7 +1473,7 @@ endif ()
 
 if (ALSOFT_INSTALL)
     install(TARGETS OpenAL
-            EXPORT OpenAL
+            EXPORT OpenAL-targets
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -1484,7 +1484,7 @@ if (ALSOFT_INSTALL)
            NAMESPACE OpenAL::
            FILE OpenALConfig.cmake)
            
-    install(EXPORT OpenAL
+    install(EXPORT OpenAL-targets
             DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/openal"
             NAMESPACE OpenAL::)
             
