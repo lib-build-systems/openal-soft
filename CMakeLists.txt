@@ -1341,10 +1341,10 @@ if (ALSOFT_EXAMPLES)
     endif ()
 endif ()
 
-if (NOT WIN32)
-    set(LIBNAME "openal")
-else ()
+if (WIN32)
     set(LIBNAME "OpenAL32")
+else ()
+    set(LIBNAME "openal")
 endif ()
 
 # Needed for openal.pc.in
