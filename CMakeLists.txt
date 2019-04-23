@@ -1477,7 +1477,7 @@ if (ALSOFT_INSTALL)
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/openal" "${CMAKE_INSTALL_INCLUDEDIR}/openal/AL"
+            INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/OpenAL" "${CMAKE_INSTALL_INCLUDEDIR}/OpenAL/AL"
     )
     
     EXPORT(TARGETS OpenAL
@@ -1486,7 +1486,7 @@ if (ALSOFT_INSTALL)
            
     install(EXPORT OpenAL-targets
             NAMESPACE OpenAL::
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/openal")
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL")
             
     install(FILES include/AL/al.h
                   include/AL/alc.h
@@ -1494,11 +1494,11 @@ if (ALSOFT_INSTALL)
                   include/AL/efx.h
                   include/AL/efx-creative.h
                   include/AL/efx-presets.h
-            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/openal/AL"
+            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/OpenAL/AL"
     )
     
     install(FILES "${OpenAL_BINARY_DIR}/openal.pc"
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/openal")
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL")
             
     if (TARGET soft_oal)
         install(TARGETS soft_oal
@@ -1541,7 +1541,7 @@ endif ()
 # Install alsoft.conf configuration file
 if (ALSOFT_CONFIG)
     install(FILES alsoftrc.sample
-            DESTINATION ${CMAKE_INSTALL_DATADIR}/openal
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/OpenAL
     )
     message(STATUS "Installing sample configuration")
     message(STATUS "")
@@ -1551,7 +1551,7 @@ endif ()
 if (ALSOFT_HRTF_DEFS)
     install(FILES hrtf/default-44100.mhr
                   hrtf/default-48000.mhr
-            DESTINATION ${CMAKE_INSTALL_DATADIR}/openal/hrtf
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/OpenAL/hrtf
     )
     message(STATUS "Installing HRTF definitions")
     message(STATUS "")
@@ -1566,7 +1566,7 @@ if (ALSOFT_AMBDEC_PRESETS)
                   presets/rectangle.ambdec
                   presets/square.ambdec
                   presets/presets.txt
-            DESTINATION ${CMAKE_INSTALL_DATADIR}/openal/presets
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/OpenAL/presets
     )
     message(STATUS "Installing AmbDec presets")
     message(STATUS "")
