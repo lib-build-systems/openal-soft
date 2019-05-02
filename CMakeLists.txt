@@ -1287,16 +1287,17 @@ file(MAKE_DIRECTORY "${NATIVE_BIN_DIR}")
 
 set(BIN2H_COMMAND  "${NATIVE_BIN_DIR}bin2h")
 set(BSINCGEN_COMMAND  "${NATIVE_BIN_DIR}bsincgen")
-add_custom_command(OUTPUT "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
-    COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" "${NATIVE_SRC_DIR}"
-    COMMAND ${CMAKE_COMMAND} -E remove "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
-    COMMAND ${CMAKE_COMMAND} --build . --config "Release"
-    WORKING_DIRECTORY "${NATIVE_BIN_DIR}"
-    DEPENDS "${NATIVE_SRC_DIR}CMakeLists.txt"
-    IMPLICIT_DEPENDS C "${NATIVE_SRC_DIR}bin2h.c"
-                     C "${NATIVE_SRC_DIR}bsincgen.c"
-    VERBATIM
-)
+add_subdirectory(native-tools)
+#add_custom_command(OUTPUT "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
+#    COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" "${NATIVE_SRC_DIR}"
+#    COMMAND ${CMAKE_COMMAND} -E remove "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
+#    COMMAND ${CMAKE_COMMAND} --build . --config "Release"
+#    WORKING_DIRECTORY "${NATIVE_BIN_DIR}"
+#    DEPENDS "${NATIVE_SRC_DIR}CMakeLists.txt"
+#    IMPLICIT_DEPENDS C "${NATIVE_SRC_DIR}bin2h.c"
+#                     C "${NATIVE_SRC_DIR}bsincgen.c"
+#    VERBATIM
+#)
 add_custom_target(native-tools
     DEPENDS "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
     VERBATIM
