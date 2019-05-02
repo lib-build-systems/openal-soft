@@ -1330,6 +1330,13 @@ try_run(NATIVE_TOOLS_BSINCGEN_RAN
         COMPILE_DEFINITIONS ${CPP_DEFS}
         LINK_LIBRARIES ${BSINCGEN_LINK_LIBS}
         ARGS "${OpenAL_BINARY_DIR}/bsinc_inc.h")
+        message("arg    : '${OpenAL_BINARY_DIR}/bsinc_inc.h'")
+if (NOT ${NATIVE_TOOLS_BSINCGEN_COMPILED})
+    message(" - bsincgen failed to compile.")
+endif ()
+if (${NATIVE_TOOLS_BSINCGEN_RAN} MATCHES "FAILED_TO_RUN")
+    message(" - bsincgen failed to run.")
+endif ()
 
 #add_custom_command(OUTPUT "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
 #    COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" "${NATIVE_SRC_DIR}"
@@ -1346,33 +1353,53 @@ try_run(NATIVE_TOOLS_BSINCGEN_RAN
 #    VERBATIM
 #)
 
+set(ALC_OBJS "")
 option(ALSOFT_EMBED_HRTF_DATA "Embed the HRTF data files (increases library footprint)" ON)
 if (ALSOFT_EMBED_HRTF_DATA)
-#    MACRO(make_hrtf_header FILENAME VARNAME)
-#        set(infile  "${OpenAL_SOURCE_DIR}/hrtf/${FILENAME}")
-#        set(outfile  "${OpenAL_BINARY_DIR}/${FILENAME}.h")
-#
+    MACRO(make_hrtf_header FILENAME VARNAME)
+        set(infile  "${OpenAL_SOURCE_DIR}/hrtf/${FILENAME}")
+        set(outfile  "${OpenAL_BINARY_DIR}/${FILENAME}.h")
+
 #        add_custom_command(OUTPUT "${outfile}"
 #            COMMAND "${BIN2H_COMMAND}" "${infile}" "${outfile}" ${VARNAME}
 #            DEPENDS native-tools "${infile}"
 #            VERBATIM
 #        )
-#        set(ALC_OBJS  ${ALC_OBJS} "${outfile}")
-#    ENDMACRO()
-#
-#    make_hrtf_header(default-44100.mhr "hrtf_default_44100")
-#    make_hrtf_header(default-48000.mhr "hrtf_default_48000")
-    set(NATIVE_TOOLS_BIN2H_RAN "0")
-    try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
-            ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
-            COMPILE_DEFINITIONS ${CPP_DEFS}
-            ARGS "${OpenAL_SOURCE_DIR}hrtf/default-44100.mhr" "${OpenAL_BINARY_DIR}/default-44100.mhr.h" "hrtf_default_44100")
+        set(NATIVE_TOOLS_BIN2H_RAN "0")
+        try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
+                ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
+                COMPILE_DEFINITIONS ${CPP_DEFS}
+                ARGS "${infile}" "${outfile}" "${VARNAME}")
+        if (NOT ${NATIVE_TOOLS_BIN2H_COMPILED})
+            message(" - bin2h failed to compile.")
+        endif ()
+        
+        if (${NATIVE_TOOLS_BSINCGEN_RAN} MATCHES "FAILED_TO_RUN")
+            message(" - bin2h failed to run.")
+        endif ()
 
-    set(NATIVE_TOOLS_BIN2H_RAN "0")
-    try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
-            ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
-            COMPILE_DEFINITIONS ${CPP_DEFS}
-            ARGS "${OpenAL_SOURCE_DIR}hrtf/default-48000.mhr" "${OpenAL_BINARY_DIR}/default-48000.mhr.h" "hrtf_default_48000")
+        set(ALC_OBJS  ${ALC_OBJS} "${outfile}")
+        message("infile : '${infile}'")
+        message("outfile: '${outfile}'")
+    ENDMACRO()
+
+    make_hrtf_header(default-44100.mhr "hrtf_default_44100")
+    make_hrtf_header(default-48000.mhr "hrtf_default_48000")
+
+#    set(NATIVE_TOOLS_BIN2H_RAN "0")
+#    try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
+#            ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
+#            COMPILE_DEFINITIONS ${CPP_DEFS}
+#            ARGS "${OpenAL_SOURCE_DIR}hrtf/default-44100.mhr" "${OpenAL_BINARY_DIR}/default-44100.mhr.h" "hrtf_default_44100")
+#    if (NATIVE_TOOLS_BIN2H_COMPILED)
+#        set(ALC_OBJS  ${ALC_OBJS} "${outfile}")
+#    endif()
+#
+#    set(NATIVE_TOOLS_BIN2H_RAN "0")
+#    try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
+#            ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
+#            COMPILE_DEFINITIONS ${CPP_DEFS}
+#            ARGS "${OpenAL_SOURCE_DIR}hrtf/default-48000.mhr" "${OpenAL_BINARY_DIR}/default-48000.mhr.h" "hrtf_default_48000")
 endif ()
 
 #add_custom_command(OUTPUT "${OpenAL_BINARY_DIR}/bsinc_inc.h"
