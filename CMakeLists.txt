@@ -553,6 +553,7 @@ check_symbol_exists(proc_pidpath     libproc.h HAVE_PROC_PIDPATH)
 check_symbol_exists(lrintf math.h HAVE_LRINTF)
 check_symbol_exists(modff  math.h HAVE_MODFF)
 check_symbol_exists(log2f  math.h HAVE_LOG2F)
+set(HAVE_LOG2F ON)
 check_symbol_exists(cbrtf  math.h HAVE_CBRTF)
 check_symbol_exists(copysignf math.h HAVE_COPYSIGNF)
 
@@ -1287,7 +1288,49 @@ file(MAKE_DIRECTORY "${NATIVE_BIN_DIR}")
 
 set(BIN2H_COMMAND  "${NATIVE_BIN_DIR}bin2h")
 set(BSINCGEN_COMMAND  "${NATIVE_BIN_DIR}bsincgen")
+
+message("CMAKE_SYSTEM_NAME: '${CMAKE_SYSTEM_NAME}'")
+message("CMAKE_HOST_SYSTEM_NAME: '${CMAKE_HOST_SYSTEM_NAME}'")
+message("CMAKE_CROSSCOMPILING: '${CMAKE_CROSSCOMPILING}'")
+
+set(NATIVE_TOOLS_EXE_EXTENSION "")
+if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
+    set(NATIVE_TOOLS_EXE_EXTENSION ".exe")
+endif ()
+
 add_subdirectory(native-tools)
+#try_compile(<resultVar> <bindir> <srcdir>
+#            <projectName> [<targetName>] [CMAKE_FLAGS <flags>...]
+#            [OUTPUT_VARIABLE <var>])
+#try_compile(NATIVE_TOOLS_BIN2H_COMPILED ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}
+#            native-tools "bin2h${NATIVE_TOOLS_EXE_EXTENSION}")
+#try_compile(NATIVE_TOOLS_BSINCGEN_COMPILED ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}
+#            native-tools "bsincgen${NATIVE_TOOLS_EXE_EXTENSION}")
+            
+#try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
+#        ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
+#        ARGS "${OpenAL_SOURCE_DIR}hrtf/default-44100.mhr" "${OpenAL_BINARY_DIR}/default-44100.mhr.h" "hrtf_default_44100")
+#try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
+#        ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
+#        ARGS "${OpenAL_SOURCE_DIR}hrtf/default-48000.mhr" "${OpenAL_BINARY_DIR}/default-48000.mhr.h" "hrtf_default_48000")
+set (BSINCGEN_LINK_LIBS "")
+if (HAVE_LIBM)
+    set (BSINCGEN_LINK_LIBS "m")
+endif ()
+
+set(CPP_DEFS "")
+if (WIN32)
+    set(CPP_DEFS "_WIN32")
+endif ()
+
+set(NATIVE_TOOLS_BSINCGEN_RAN "0")
+try_run(NATIVE_TOOLS_BSINCGEN_RAN
+        NATIVE_TOOLS_BSINCGEN_COMPILED
+        ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bsincgen.c
+        COMPILE_DEFINITIONS ${CPP_DEFS}
+        LINK_LIBRARIES ${BSINCGEN_LINK_LIBS}
+        ARGS "${OpenAL_BINARY_DIR}/bsinc_inc.h")
+
 #add_custom_command(OUTPUT "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
 #    COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" "${NATIVE_SRC_DIR}"
 #    COMMAND ${CMAKE_COMMAND} -E remove "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
@@ -1298,34 +1341,45 @@ add_subdirectory(native-tools)
 #                     C "${NATIVE_SRC_DIR}bsincgen.c"
 #    VERBATIM
 #)
-add_custom_target(native-tools
-    DEPENDS "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
-    VERBATIM
-)
+#add_custom_target(native-tools
+#    DEPENDS "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
+#    VERBATIM
+#)
 
 option(ALSOFT_EMBED_HRTF_DATA "Embed the HRTF data files (increases library footprint)" ON)
 if (ALSOFT_EMBED_HRTF_DATA)
-    MACRO(make_hrtf_header FILENAME VARNAME)
-        set(infile  "${OpenAL_SOURCE_DIR}/hrtf/${FILENAME}")
-        set(outfile  "${OpenAL_BINARY_DIR}/${FILENAME}.h")
+#    MACRO(make_hrtf_header FILENAME VARNAME)
+#        set(infile  "${OpenAL_SOURCE_DIR}/hrtf/${FILENAME}")
+#        set(outfile  "${OpenAL_BINARY_DIR}/${FILENAME}.h")
+#
+#        add_custom_command(OUTPUT "${outfile}"
+#            COMMAND "${BIN2H_COMMAND}" "${infile}" "${outfile}" ${VARNAME}
+#            DEPENDS native-tools "${infile}"
+#            VERBATIM
+#        )
+#        set(ALC_OBJS  ${ALC_OBJS} "${outfile}")
+#    ENDMACRO()
+#
+#    make_hrtf_header(default-44100.mhr "hrtf_default_44100")
+#    make_hrtf_header(default-48000.mhr "hrtf_default_48000")
+    set(NATIVE_TOOLS_BIN2H_RAN "0")
+    try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
+            ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
+            COMPILE_DEFINITIONS ${CPP_DEFS}
+            ARGS "${OpenAL_SOURCE_DIR}hrtf/default-44100.mhr" "${OpenAL_BINARY_DIR}/default-44100.mhr.h" "hrtf_default_44100")
 
-        add_custom_command(OUTPUT "${outfile}"
-            COMMAND "${BIN2H_COMMAND}" "${infile}" "${outfile}" ${VARNAME}
-            DEPENDS native-tools "${infile}"
-            VERBATIM
-        )
-        set(ALC_OBJS  ${ALC_OBJS} "${outfile}")
-    ENDMACRO()
-
-    make_hrtf_header(default-44100.mhr "hrtf_default_44100")
-    make_hrtf_header(default-48000.mhr "hrtf_default_48000")
+    set(NATIVE_TOOLS_BIN2H_RAN "0")
+    try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
+            ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
+            COMPILE_DEFINITIONS ${CPP_DEFS}
+            ARGS "${OpenAL_SOURCE_DIR}hrtf/default-48000.mhr" "${OpenAL_BINARY_DIR}/default-48000.mhr.h" "hrtf_default_48000")
 endif ()
 
-add_custom_command(OUTPUT "${OpenAL_BINARY_DIR}/bsinc_inc.h"
-    COMMAND "${BSINCGEN_COMMAND}" "${OpenAL_BINARY_DIR}/bsinc_inc.h"
-    DEPENDS native-tools "${NATIVE_SRC_DIR}bsincgen.c"
-    VERBATIM
-)
+#add_custom_command(OUTPUT "${OpenAL_BINARY_DIR}/bsinc_inc.h"
+#    COMMAND "${BSINCGEN_COMMAND}" "${OpenAL_BINARY_DIR}/bsinc_inc.h"
+#    DEPENDS native-tools "${NATIVE_SRC_DIR}bsincgen.c"
+#    VERBATIM
+#)
 set(ALC_OBJS  ${ALC_OBJS} "${OpenAL_BINARY_DIR}/bsinc_inc.h")
 
 
