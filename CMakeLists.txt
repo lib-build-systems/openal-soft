@@ -553,7 +553,7 @@ CHECK_SYMBOL_EXISTS(proc_pidpath     libproc.h HAVE_PROC_PIDPATH)
 CHECK_SYMBOL_EXISTS(lrintf math.h HAVE_LRINTF)
 CHECK_SYMBOL_EXISTS(modff  math.h HAVE_MODFF)
 CHECK_SYMBOL_EXISTS(log2f  math.h HAVE_LOG2F)
-set(HAVE_LOG2F TRUE)
+#set(HAVE_LOG2F TRUE)
 CHECK_SYMBOL_EXISTS(cbrtf  math.h HAVE_CBRTF)
 CHECK_SYMBOL_EXISTS(copysignf math.h HAVE_COPYSIGNF)
 
@@ -1277,9 +1277,9 @@ SET(BACKENDS  "${BACKENDS} Null")
 #ELSE()
 #    SET(GIT_BRANCH "UNKNOWN")
 #    SET(GIT_COMMIT_HASH "unknown")
-#    CONFIGURE_FILE(
-#        "${OpenAL_SOURCE_DIR}/version.h.in"
-#        "${OpenAL_BINARY_DIR}/version.h")
+    CONFIGURE_FILE(
+        "${OpenAL_SOURCE_DIR}/version.h.in"
+        "${OpenAL_BINARY_DIR}/version.h")
 #ENDIF()
 
 SET(NATIVE_SRC_DIR  "${OpenAL_SOURCE_DIR}/native-tools/")
