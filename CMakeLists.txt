@@ -1,235 +1,235 @@
 # CMake build file list for OpenAL
 
-cmake_minimum_required(VERSION 3.0.2)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.2)
 
-project(OpenAL)
+PROJECT(OpenAL)
 
-if (COMMAND cmake_policy)
-    cmake_policy(SET CMP0003 NEW)
-    cmake_policy(SET CMP0005 NEW)
-    if (POLICY CMP0020)
-        cmake_policy(SET CMP0020 NEW)
-    endif (POLICY CMP0020)
-    if (POLICY CMP0042)
-        cmake_policy(SET CMP0042 NEW)
-    endif (POLICY CMP0042)
-    if (POLICY CMP0054)
-        cmake_policy(SET CMP0054 NEW)
-    endif (POLICY CMP0054)
-endif (COMMAND cmake_policy)
+IF(COMMAND CMAKE_POLICY)
+    CMAKE_POLICY(SET CMP0003 NEW)
+    CMAKE_POLICY(SET CMP0005 NEW)
+    IF(POLICY CMP0020)
+        CMAKE_POLICY(SET CMP0020 NEW)
+    ENDIF(POLICY CMP0020)
+    IF(POLICY CMP0042)
+        CMAKE_POLICY(SET CMP0042 NEW)
+    ENDIF(POLICY CMP0042)
+    IF(POLICY CMP0054)
+        CMAKE_POLICY(SET CMP0054 NEW)
+    ENDIF(POLICY CMP0054)
+ENDIF(COMMAND CMAKE_POLICY)
 
-set(CMAKE_MODULE_PATH "${OpenAL_SOURCE_DIR}/cmake")
+SET(CMAKE_MODULE_PATH "${OpenAL_SOURCE_DIR}/cmake")
 
-include(CheckFunctionExists)
-include(CheckLibraryExists)
-include(CheckSharedFunctionExists)
-include(CheckIncludeFile)
-include(CheckIncludeFiles)
-include(CheckSymbolExists)
-include(CheckCCompilerFlag)
-include(CheckCXXCompilerFlag)
-include(CheckCSourceCompiles)
-include(CheckTypeSize)
+INCLUDE(CheckFunctionExists)
+INCLUDE(CheckLibraryExists)
+INCLUDE(CheckSharedFunctionExists)
+INCLUDE(CheckIncludeFile)
+INCLUDE(CheckIncludeFiles)
+INCLUDE(CheckSymbolExists)
+INCLUDE(CheckCCompilerFlag)
+INCLUDE(CheckCXXCompilerFlag)
+INCLUDE(CheckCSourceCompiles)
+INCLUDE(CheckTypeSize)
 include(CheckStructHasMember)
 include(CheckFileOffsetBits)
 include(GNUInstallDirs)
 
-set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
+SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
 
-option(ALSOFT_DLOPEN  "Check for the dlopen API for loading optional libs"  ON)
+OPTION(ALSOFT_DLOPEN  "Check for the dlopen API for loading optional libs"  ON)
 
-option(ALSOFT_WERROR  "Treat compile warnings as errors"      OFF)
+OPTION(ALSOFT_WERROR  "Treat compile warnings as errors"      OFF)
 
-option(ALSOFT_UTILS          "Build and install utility programs"         ON)
-option(ALSOFT_NO_CONFIG_UTIL "Disable building the alsoft-config utility" OFF)
+OPTION(ALSOFT_UTILS          "Build and install utility programs"         ON)
+OPTION(ALSOFT_NO_CONFIG_UTIL "Disable building the alsoft-config utility" OFF)
 
-option(ALSOFT_EXAMPLES  "Build and install example programs"  ON)
-option(ALSOFT_TESTS     "Build and install test programs"     ON)
+OPTION(ALSOFT_EXAMPLES  "Build and install example programs"  ON)
+OPTION(ALSOFT_TESTS     "Build and install test programs"     ON)
 
-option(ALSOFT_CONFIG "Install alsoft.conf sample configuration file" ON)
-option(ALSOFT_HRTF_DEFS "Install HRTF definition files" ON)
-option(ALSOFT_AMBDEC_PRESETS "Install AmbDec preset files" ON)
-option(ALSOFT_INSTALL "Install headers and libraries" ON)
+OPTION(ALSOFT_CONFIG "Install alsoft.conf sample configuration file" ON)
+OPTION(ALSOFT_HRTF_DEFS "Install HRTF definition files" ON)
+OPTION(ALSOFT_AMBDEC_PRESETS "Install AmbDec preset files" ON)
+OPTION(ALSOFT_INSTALL "Install headers and libraries" ON)
 
-if (DEFINED SHARE_INSTALL_DIR)
+if(DEFINED SHARE_INSTALL_DIR)
     message(WARNING "SHARE_INSTALL_DIR is deprecated.  Use the variables provided by the GNUInstallDirs module instead")
     set(CMAKE_INSTALL_DATADIR "${SHARE_INSTALL_DIR}")
-endif ()
+endif()
 
-if (DEFINED LIB_SUFFIX)
+if(DEFINED LIB_SUFFIX)
     message(WARNING "LIB_SUFFIX is deprecated.  Use the variables provided by the GNUInstallDirs module instead")
-endif ()
+endif()
 
 
-set(CPP_DEFS ) # C pre-process, not C++
-set(INC_PATHS )
-set(C_FLAGS )
-set(LINKER_FLAGS )
-set(EXTRA_LIBS )
+SET(CPP_DEFS ) # C pre-process, not C++
+SET(INC_PATHS )
+SET(C_FLAGS )
+SET(LINKER_FLAGS )
+SET(EXTRA_LIBS )
 
-if (WIN32)
-    set(CPP_DEFS ${CPP_DEFS} _WIN32 _WIN32_WINNT=0x0502)
+IF(WIN32)
+    SET(CPP_DEFS ${CPP_DEFS} _WIN32 _WIN32_WINNT=0x0502)
 
-    option(ALSOFT_BUILD_ROUTER  "Build the router (EXPERIMENTAL; creates OpenAL32.dll and soft_oal.dll)"  OFF)
+    OPTION(ALSOFT_BUILD_ROUTER  "Build the router (EXPERIMENTAL; creates OpenAL32.dll and soft_oal.dll)"  OFF)
 
     # This option is mainly for static linking OpenAL Soft into another project
     # that already defines the IDs. It is up to that project to ensure all
     # required IDs are defined.
-    option(ALSOFT_NO_UID_DEFS "Do not define GUIDs, IIDs, CLSIDs, or PropertyKeys" OFF)
+    OPTION(ALSOFT_NO_UID_DEFS "Do not define GUIDs, IIDs, CLSIDs, or PropertyKeys" OFF)
 
-    if (MINGW)
-        option(ALSOFT_BUILD_IMPORT_LIB "Build an import .lib using dlltool (requires sed)" ON)
-        if (NOT DLLTOOL)
-            if (HOST)
-                set(DLLTOOL "${HOST}-dlltool")
-            else ()
-                set(DLLTOOL "dlltool")
-            endif ()
-        endif ()
-    endif ()
-endif ()
+    IF(MINGW)
+        OPTION(ALSOFT_BUILD_IMPORT_LIB "Build an import .lib using dlltool (requires sed)" ON)
+        IF(NOT DLLTOOL)
+            IF(HOST)
+                SET(DLLTOOL "${HOST}-dlltool")
+            ELSE()
+                SET(DLLTOOL "dlltool")
+            ENDIF()
+        ENDIF()
+    ENDIF()
+ENDIF()
 
 
 # QNX's gcc do not uses /usr/include and /usr/lib pathes by default
-if ("${CMAKE_C_PLATFORM_ID}" STREQUAL "QNX")
-    set(INC_PATHS ${INC_PATHS} /usr/include)
-    set(LINKER_FLAGS ${LINKER_FLAGS} -L/usr/lib)
-endif ()
+IF ("${CMAKE_C_PLATFORM_ID}" STREQUAL "QNX")
+    SET(INC_PATHS ${INC_PATHS} /usr/include)
+    SET(LINKER_FLAGS ${LINKER_FLAGS} -L/usr/lib)
+ENDIF()
 
-if (NOT LIBTYPE)
-    set(LIBTYPE SHARED)
-endif ()
+IF(NOT LIBTYPE)
+    SET(LIBTYPE SHARED)
+ENDIF()
 
-set(LIB_MAJOR_VERSION "1")
-set(LIB_MINOR_VERSION "19")
-set(LIB_REVISION "1")
-set(LIB_VERSION "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_REVISION}")
+SET(LIB_MAJOR_VERSION "1")
+SET(LIB_MINOR_VERSION "19")
+SET(LIB_REVISION "1")
+SET(LIB_VERSION "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_REVISION}")
 
-set(EXPORT_DECL "")
-set(ALIGN_DECL "")
+SET(EXPORT_DECL "")
+SET(ALIGN_DECL "")
 
 
 CHECK_TYPE_SIZE("long" SIZEOF_LONG)
 CHECK_TYPE_SIZE("long long" SIZEOF_LONG_LONG)
 
 
-check_c_compiler_flag(-std=c11 HAVE_STD_C11)
-if (HAVE_STD_C11)
-    set(CMAKE_C_FLAGS "-std=c11 ${CMAKE_C_FLAGS}")
-else ()
-    check_c_compiler_flag(-std=c99 HAVE_STD_C99)
-    if (HAVE_STD_C99)
-        set(CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
-    endif ()
-endif ()
+CHECK_C_COMPILER_FLAG(-std=c11 HAVE_STD_C11)
+IF(HAVE_STD_C11)
+    SET(CMAKE_C_FLAGS "-std=c11 ${CMAKE_C_FLAGS}")
+ELSE()
+    CHECK_C_COMPILER_FLAG(-std=c99 HAVE_STD_C99)
+    IF(HAVE_STD_C99)
+        SET(CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
+    ENDIF()
+ENDIF()
 
 CHECK_CXX_COMPILER_FLAG(-std=c++11 HAVE_STD_CXX11)
-if (HAVE_STD_CXX11)
-    set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
-endif ()
+IF(HAVE_STD_CXX11)
+    SET(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+ENDIF()
 
-if (NOT WIN32)
+if(NOT WIN32)
     # Check if _POSIX_C_SOURCE and _XOPEN_SOURCE needs to be set for POSIX functions
-    check_symbol_exists(posix_memalign stdlib.h HAVE_POSIX_MEMALIGN_DEFAULT)
-    if (NOT HAVE_POSIX_MEMALIGN_DEFAULT)
-        set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE=600")
-        check_symbol_exists(posix_memalign stdlib.h HAVE_POSIX_MEMALIGN_POSIX)
-        if (NOT HAVE_POSIX_MEMALIGN_POSIX)
-            set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-        else ()
-            set(CPP_DEFS ${CPP_DEFS} _POSIX_C_SOURCE=200112L _XOPEN_SOURCE=600)
-        endif ()
-    endif ()
-    unset(OLD_REQUIRED_FLAGS)
-endif ()
+    CHECK_SYMBOL_EXISTS(posix_memalign stdlib.h HAVE_POSIX_MEMALIGN_DEFAULT)
+    IF(NOT HAVE_POSIX_MEMALIGN_DEFAULT)
+        SET(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+        SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -D_POSIX_C_SOURCE=200112L -D_XOPEN_SOURCE=600")
+        CHECK_SYMBOL_EXISTS(posix_memalign stdlib.h HAVE_POSIX_MEMALIGN_POSIX)
+        IF(NOT HAVE_POSIX_MEMALIGN_POSIX)
+            SET(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+        ELSE()
+            SET(CPP_DEFS ${CPP_DEFS} _POSIX_C_SOURCE=200112L _XOPEN_SOURCE=600)
+        ENDIF()
+    ENDIF()
+    UNSET(OLD_REQUIRED_FLAGS)
+ENDIF()
 
 # Set defines for large file support
 CHECK_FILE_OFFSET_BITS()
-if (_FILE_OFFSET_BITS)
-    set(CPP_DEFS ${CPP_DEFS} "_FILE_OFFSET_BITS=${_FILE_OFFSET_BITS}")
-    set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -D_FILE_OFFSET_BITS=${_FILE_OFFSET_BITS}")
-endif ()
-set(CPP_DEFS ${CPP_DEFS} _LARGEFILE_SOURCE _LARGE_FILES)
-set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -D_LARGEFILE_SOURCE -D_LARGE_FILES")
+IF(_FILE_OFFSET_BITS)
+    SET(CPP_DEFS ${CPP_DEFS} "_FILE_OFFSET_BITS=${_FILE_OFFSET_BITS}")
+    SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -D_FILE_OFFSET_BITS=${_FILE_OFFSET_BITS}")
+ENDIF()
+SET(CPP_DEFS ${CPP_DEFS} _LARGEFILE_SOURCE _LARGE_FILES)
+SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -D_LARGEFILE_SOURCE -D_LARGE_FILES")
 
 # MSVC may need workarounds for C99 restrict and inline
-if (MSVC)
+IF(MSVC)
     # TODO: Once we truly require C99, these restrict and inline checks should go
     # away.
-    check_c_source_compiles("int *restrict foo;
+    CHECK_C_SOURCE_COMPILES("int *restrict foo;
                              int main() {return 0;}" HAVE_RESTRICT)
-    if (NOT HAVE_RESTRICT)
-        set(CPP_DEFS ${CPP_DEFS} "restrict=")
-        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Drestrict=")
-    endif ()
+    IF(NOT HAVE_RESTRICT)
+        SET(CPP_DEFS ${CPP_DEFS} "restrict=")
+        SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Drestrict=")
+    ENDIF()
 
-    check_c_source_compiles("inline void foo(void) { }
+    CHECK_C_SOURCE_COMPILES("inline void foo(void) { }
                              int main() {return 0;}" HAVE_INLINE)
-    if (NOT HAVE_INLINE)
-        check_c_source_compiles("__inline void foo(void) { }
+    IF(NOT HAVE_INLINE)
+        CHECK_C_SOURCE_COMPILES("__inline void foo(void) { }
                                  int main() {return 0;}" HAVE___INLINE)
-        if (NOT HAVE___INLINE)
-            message(FATAL_ERROR "No inline keyword found, please report!")
-        endif ()
+        IF(NOT HAVE___INLINE)
+            MESSAGE(FATAL_ERROR "No inline keyword found, please report!")
+        ENDIF()
 
-        set(CPP_DEFS ${CPP_DEFS} inline=__inline)
-        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Dinline=__inline")
-    endif ()
-endif ()
+        SET(CPP_DEFS ${CPP_DEFS} inline=__inline)
+        SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -Dinline=__inline")
+    ENDIF()
+ENDIF()
 
 # Make sure we have C99-style inline semantics with GCC (4.3 or newer).
-if (CMAKE_COMPILER_IS_GNUCC)
-    set(CMAKE_C_FLAGS "-fno-gnu89-inline ${CMAKE_C_FLAGS}")
+IF(CMAKE_COMPILER_IS_GNUCC)
+    SET(CMAKE_C_FLAGS "-fno-gnu89-inline ${CMAKE_C_FLAGS}")
 
-    set(OLD_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+    SET(OLD_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
     # Force no inlining for the next test.
-    set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -fno-inline")
+    SET(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -fno-inline")
 
-    check_c_source_compiles("extern inline int foo() { return 0; }
+    CHECK_C_SOURCE_COMPILES("extern inline int foo() { return 0; }
                              int main() {return foo();}" INLINE_IS_C99)
-    if (NOT INLINE_IS_C99)
-        message(FATAL_ERROR "Your compiler does not seem to have C99 inline semantics!
+    IF(NOT INLINE_IS_C99)
+        MESSAGE(FATAL_ERROR "Your compiler does not seem to have C99 inline semantics!
                              Please update your compiler for better C99 compliance.")
-    endif ()
+    ENDIF()
 
-    set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS}")
-endif ()
+    SET(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS}")
+ENDIF()
 
 # Check if we have a proper timespec declaration
 CHECK_STRUCT_HAS_MEMBER("struct timespec" tv_sec time.h HAVE_STRUCT_TIMESPEC)
-if (HAVE_STRUCT_TIMESPEC)
+IF(HAVE_STRUCT_TIMESPEC)
     # Define it here so we don't have to include config.h for it
-    set(CPP_DEFS ${CPP_DEFS} HAVE_STRUCT_TIMESPEC)
-endif ()
+    SET(CPP_DEFS ${CPP_DEFS} HAVE_STRUCT_TIMESPEC)
+ENDIF()
 
 # Some systems may need libatomic for C11 atomic functions to work
-set(OLD_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
-set(CMAKE_REQUIRED_LIBRARIES ${OLD_REQUIRED_LIBRARIES} atomic)
-check_c_source_compiles("#include <stdatomic.h>
+SET(OLD_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
+SET(CMAKE_REQUIRED_LIBRARIES ${OLD_REQUIRED_LIBRARIES} atomic)
+CHECK_C_SOURCE_COMPILES("#include <stdatomic.h>
 int _Atomic foo = ATOMIC_VAR_INIT(0);
 int main()
 {
     return atomic_fetch_add(&foo, 2);
 }"
 HAVE_LIBATOMIC)
-if (NOT HAVE_LIBATOMIC)
-    set(CMAKE_REQUIRED_LIBRARIES "${OLD_REQUIRED_LIBRARIES}")
-else ()
-    set(EXTRA_LIBS atomic ${EXTRA_LIBS})
-endif ()
-unset(OLD_REQUIRED_LIBRARIES)
+IF(NOT HAVE_LIBATOMIC)
+    SET(CMAKE_REQUIRED_LIBRARIES "${OLD_REQUIRED_LIBRARIES}")
+ELSE()
+    SET(EXTRA_LIBS atomic ${EXTRA_LIBS})
+ENDIF()
+UNSET(OLD_REQUIRED_LIBRARIES)
 
 # Include liblog for Android logging
-check_library_exists(log __android_log_print "" HAVE_LIBLOG)
-if (HAVE_LIBLOG)
-    set(EXTRA_LIBS log ${EXTRA_LIBS})
-    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} log)
-endif ()
+CHECK_LIBRARY_EXISTS(log __android_log_print "" HAVE_LIBLOG)
+IF(HAVE_LIBLOG)
+    SET(EXTRA_LIBS log ${EXTRA_LIBS})
+    SET(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} log)
+ENDIF()
 
 # Check if we have C99 bool
-check_c_source_compiles(
+CHECK_C_SOURCE_COMPILES(
 "int main(int argc, char *argv[])
  {
      volatile _Bool ret;
@@ -239,7 +239,7 @@ check_c_source_compiles(
 HAVE_C99_BOOL)
 
 # Check if we have C11 static_assert
-check_c_source_compiles(
+CHECK_C_SOURCE_COMPILES(
 "int main()
  {
      _Static_assert(sizeof(int) == sizeof(int), \"What\");
@@ -248,7 +248,7 @@ check_c_source_compiles(
 HAVE_C11_STATIC_ASSERT)
 
 # Check if we have C11 alignas
-check_c_source_compiles(
+CHECK_C_SOURCE_COMPILES(
 "_Alignas(16) int foo;
  int main()
  {
@@ -257,7 +257,7 @@ check_c_source_compiles(
 HAVE_C11_ALIGNAS)
 
 # Check if we have C11 _Atomic
-check_c_source_compiles(
+CHECK_C_SOURCE_COMPILES(
 "#include <stdatomic.h>
  int _Atomic foo = ATOMIC_VAR_INIT(0);
  int main()
@@ -268,71 +268,71 @@ check_c_source_compiles(
 HAVE_C11_ATOMIC)
 
 # Add definitions, compiler switches, etc.
-include_directories("${OpenAL_SOURCE_DIR}/include" "${OpenAL_SOURCE_DIR}/common" "${OpenAL_BINARY_DIR}")
+INCLUDE_DIRECTORIES("${OpenAL_SOURCE_DIR}/include" "${OpenAL_SOURCE_DIR}/common" "${OpenAL_BINARY_DIR}")
 
-if (NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+IF(NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
         "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel."
         FORCE)
-endif ()
-if (NOT CMAKE_DEBUG_POSTFIX)
-    set(CMAKE_DEBUG_POSTFIX "" CACHE STRING
+ENDIF()
+IF(NOT CMAKE_DEBUG_POSTFIX)
+    SET(CMAKE_DEBUG_POSTFIX "" CACHE STRING
         "Library postfix for debug builds. Normally left blank."
         FORCE)
-endif ()
+ENDIF()
 
-if (MSVC)
-    set(CPP_DEFS ${CPP_DEFS} _CRT_SECURE_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE)
-    set(C_FLAGS ${C_FLAGS} /wd4098)
+IF(MSVC)
+    SET(CPP_DEFS ${CPP_DEFS} _CRT_SECURE_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE)
+    SET(C_FLAGS ${C_FLAGS} /wd4098)
 
-    if (NOT DXSDK_DIR)
-        string(REGEX REPLACE "\\\\" "/" DXSDK_DIR "$ENV{DXSDK_DIR}")
-    else ()
-        string(REGEX REPLACE "\\\\" "/" DXSDK_DIR "${DXSDK_DIR}")
-    endif ()
-    if (DXSDK_DIR)
-        message(STATUS "Using DirectX SDK directory: ${DXSDK_DIR}")
-    endif ()
+    IF(NOT DXSDK_DIR)
+        STRING(REGEX REPLACE "\\\\" "/" DXSDK_DIR "$ENV{DXSDK_DIR}")
+    ELSE()
+        STRING(REGEX REPLACE "\\\\" "/" DXSDK_DIR "${DXSDK_DIR}")
+    ENDIF()
+    IF(DXSDK_DIR)
+        MESSAGE(STATUS "Using DirectX SDK directory: ${DXSDK_DIR}")
+    ENDIF()
 
-    option(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
-    if (FORCE_STATIC_VCRT)
-        foreach (flag_var
+    OPTION(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
+    IF(FORCE_STATIC_VCRT)
+        FOREACH(flag_var
                 CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
                 CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO)
-            if (${flag_var} MATCHES "/MD")
-                string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
-            endif ()
-        endforeach (flag_var)
-    endif ()
-else ()
-    set(C_FLAGS ${C_FLAGS} -Winline -Wall)
-    check_c_compiler_flag(-Wextra HAVE_W_EXTRA)
-    if (HAVE_W_EXTRA)
-        set(C_FLAGS ${C_FLAGS} -Wextra)
-    endif ()
+            IF(${flag_var} MATCHES "/MD")
+                STRING(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+            ENDIF()
+        ENDFOREACH(flag_var)
+    ENDIF()
+ELSE()
+    SET(C_FLAGS ${C_FLAGS} -Winline -Wall)
+    CHECK_C_COMPILER_FLAG(-Wextra HAVE_W_EXTRA)
+    IF(HAVE_W_EXTRA)
+        SET(C_FLAGS ${C_FLAGS} -Wextra)
+    ENDIF()
 
-    if (ALSOFT_WERROR)
-        set(C_FLAGS ${C_FLAGS} -Werror)
-    endif ()
+    IF(ALSOFT_WERROR)
+        SET(C_FLAGS ${C_FLAGS} -Werror)
+    ENDIF()
 
     # We want RelWithDebInfo to actually include debug stuff (define _DEBUG
     # instead of NDEBUG)
-    foreach (flag_var  CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_RELWITHDEBINFO)
-        if (${flag_var} MATCHES "-DNDEBUG")
-            string(REGEX REPLACE "-DNDEBUG" "-D_DEBUG" ${flag_var} "${${flag_var}}")
-        endif ()
-    endforeach ()
+    FOREACH(flag_var  CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+        IF(${flag_var} MATCHES "-DNDEBUG")
+            STRING(REGEX REPLACE "-DNDEBUG" "-D_DEBUG" ${flag_var} "${${flag_var}}")
+        ENDIF()
+    ENDFOREACH()
 
-    check_c_compiler_flag(-fno-math-errno HAVE_FNO_MATH_ERRNO)
-    if (HAVE_FNO_MATH_ERRNO)
-        set(C_FLAGS ${C_FLAGS} -fno-math-errno)
-    endif ()
+    CHECK_C_COMPILER_FLAG(-fno-math-errno HAVE_FNO_MATH_ERRNO)
+    IF(HAVE_FNO_MATH_ERRNO)
+        SET(C_FLAGS ${C_FLAGS} -fno-math-errno)
+    ENDIF()
 
-    check_c_source_compiles("int foo() __attribute__((destructor));
+    CHECK_C_SOURCE_COMPILES("int foo() __attribute__((destructor));
                              int main() {return 0;}" HAVE_GCC_DESTRUCTOR)
 
     option(ALSOFT_STATIC_LIBGCC "Force -static-libgcc for static GCC runtimes" OFF)
-    if (ALSOFT_STATIC_LIBGCC)
+    if(ALSOFT_STATIC_LIBGCC)
         set(OLD_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
         set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} -static-libgcc)
         check_c_source_compiles(
@@ -343,329 +343,329 @@ int main()
 }"
             HAVE_STATIC_LIBGCC_SWITCH
         )
-        if (HAVE_STATIC_LIBGCC_SWITCH)
-            set(LINKER_FLAGS ${LINKER_FLAGS} -static-libgcc)
-        endif ()
+        if(HAVE_STATIC_LIBGCC_SWITCH)
+            SET(LINKER_FLAGS ${LINKER_FLAGS} -static-libgcc)
+        endif()
         set(CMAKE_REQUIRED_LIBRARIES ${OLD_REQUIRED_LIBRARIES})
         unset(OLD_REQUIRED_LIBRARIES)
-    endif ()
-endif ()
+    endif()
+ENDIF()
 
 # Set visibility/export options if available
-if (WIN32)
-    set(EXPORT_DECL "__declspec(dllexport)")
-    if (NOT MINGW)
-        set(ALIGN_DECL "__declspec(align(x))")
-    else ()
-        set(ALIGN_DECL "__declspec(aligned(x))")
-    endif ()
-else ()
-    set(OLD_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+IF(WIN32)
+    SET(EXPORT_DECL "__declspec(dllexport)")
+    IF(NOT MINGW)
+        SET(ALIGN_DECL "__declspec(align(x))")
+    ELSE()
+        SET(ALIGN_DECL "__declspec(aligned(x))")
+    ENDIF()
+ELSE()
+    SET(OLD_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
     # Yes GCC, really don't accept visibility modes you don't support
-    set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Wattributes -Werror")
+    SET(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Wattributes -Werror")
 
-    check_c_source_compiles("int foo() __attribute__((visibility(\"protected\")));
+    CHECK_C_SOURCE_COMPILES("int foo() __attribute__((visibility(\"protected\")));
                              int main() {return 0;}" HAVE_GCC_PROTECTED_VISIBILITY)
-    if (HAVE_GCC_PROTECTED_VISIBILITY)
-        set(EXPORT_DECL "__attribute__((visibility(\"protected\")))")
-    else ()
-        check_c_source_compiles("int foo() __attribute__((visibility(\"default\")));
+    IF(HAVE_GCC_PROTECTED_VISIBILITY)
+        SET(EXPORT_DECL "__attribute__((visibility(\"protected\")))")
+    ELSE()
+        CHECK_C_SOURCE_COMPILES("int foo() __attribute__((visibility(\"default\")));
                                  int main() {return 0;}" HAVE_GCC_DEFAULT_VISIBILITY)
-        if (HAVE_GCC_DEFAULT_VISIBILITY)
-            set(EXPORT_DECL "__attribute__((visibility(\"default\")))")
-        endif ()
-    endif ()
+        IF(HAVE_GCC_DEFAULT_VISIBILITY)
+            SET(EXPORT_DECL "__attribute__((visibility(\"default\")))")
+        ENDIF()
+    ENDIF()
 
-    if (HAVE_GCC_PROTECTED_VISIBILITY OR HAVE_GCC_DEFAULT_VISIBILITY)
-        check_c_compiler_flag(-fvisibility=hidden HAVE_VISIBILITY_HIDDEN_SWITCH)
-        if (HAVE_VISIBILITY_HIDDEN_SWITCH)
-            set(C_FLAGS ${C_FLAGS} -fvisibility=hidden)
-        endif ()
-    endif ()
+    IF(HAVE_GCC_PROTECTED_VISIBILITY OR HAVE_GCC_DEFAULT_VISIBILITY)
+        CHECK_C_COMPILER_FLAG(-fvisibility=hidden HAVE_VISIBILITY_HIDDEN_SWITCH)
+        IF(HAVE_VISIBILITY_HIDDEN_SWITCH)
+            SET(C_FLAGS ${C_FLAGS} -fvisibility=hidden)
+        ENDIF()
+    ENDIF()
 
-    check_c_source_compiles("int foo __attribute__((aligned(16)));
+    CHECK_C_SOURCE_COMPILES("int foo __attribute__((aligned(16)));
                              int main() {return 0;}" HAVE_ATTRIBUTE_ALIGNED)
-    if (HAVE_ATTRIBUTE_ALIGNED)
-        set(ALIGN_DECL "__attribute__((aligned(x)))")
-    endif ()
+    IF(HAVE_ATTRIBUTE_ALIGNED)
+        SET(ALIGN_DECL "__attribute__((aligned(x)))")
+    ENDIF()
 
-    set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS}")
-endif ()
+    SET(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS}")
+ENDIF()
 
-check_c_source_compiles("
+CHECK_C_SOURCE_COMPILES("
 int main()
 {
     float *ptr;
     ptr = __builtin_assume_aligned(ptr, 16);
     return 0;
 }" HAVE___BUILTIN_ASSUME_ALIGNED)
-if (HAVE___BUILTIN_ASSUME_ALIGNED)
-    set(ASSUME_ALIGNED_DECL "__builtin_assume_aligned(x, y)")
-else ()
-    set(ASSUME_ALIGNED_DECL "(x)")
-endif ()
+IF(HAVE___BUILTIN_ASSUME_ALIGNED)
+    SET(ASSUME_ALIGNED_DECL "__builtin_assume_aligned(x, y)")
+ELSE()
+    SET(ASSUME_ALIGNED_DECL "(x)")
+ENDIF()
 
-set(SSE_SWITCH "")
-set(SSE2_SWITCH "")
-set(SSE3_SWITCH "")
-set(SSE4_1_SWITCH "")
-set(FPU_NEON_SWITCH "")
+SET(SSE_SWITCH "")
+SET(SSE2_SWITCH "")
+SET(SSE3_SWITCH "")
+SET(SSE4_1_SWITCH "")
+SET(FPU_NEON_SWITCH "")
 
-check_c_compiler_flag(-msse HAVE_MSSE_SWITCH)
-if (HAVE_MSSE_SWITCH)
-    set(SSE_SWITCH "-msse")
-endif ()
-check_c_compiler_flag(-msse2 HAVE_MSSE2_SWITCH)
-if (HAVE_MSSE2_SWITCH)
-    set(SSE2_SWITCH "-msse2")
-endif ()
-check_c_compiler_flag(-msse3 HAVE_MSSE3_SWITCH)
-if (HAVE_MSSE3_SWITCH)
-    set(SSE3_SWITCH "-msse3")
-endif ()
-check_c_compiler_flag(-msse4.1 HAVE_MSSE4_1_SWITCH)
-if (HAVE_MSSE4_1_SWITCH)
-    set(SSE4_1_SWITCH "-msse4.1")
-endif ()
-check_c_compiler_flag(-mfpu=neon HAVE_MFPU_NEON_SWITCH)
-if (HAVE_MFPU_NEON_SWITCH)
-    set(FPU_NEON_SWITCH "-mfpu=neon")
-endif ()
+CHECK_C_COMPILER_FLAG(-msse HAVE_MSSE_SWITCH)
+IF(HAVE_MSSE_SWITCH)
+    SET(SSE_SWITCH "-msse")
+ENDIF()
+CHECK_C_COMPILER_FLAG(-msse2 HAVE_MSSE2_SWITCH)
+IF(HAVE_MSSE2_SWITCH)
+    SET(SSE2_SWITCH "-msse2")
+ENDIF()
+CHECK_C_COMPILER_FLAG(-msse3 HAVE_MSSE3_SWITCH)
+IF(HAVE_MSSE3_SWITCH)
+    SET(SSE3_SWITCH "-msse3")
+ENDIF()
+CHECK_C_COMPILER_FLAG(-msse4.1 HAVE_MSSE4_1_SWITCH)
+IF(HAVE_MSSE4_1_SWITCH)
+    SET(SSE4_1_SWITCH "-msse4.1")
+ENDIF()
+CHECK_C_COMPILER_FLAG(-mfpu=neon HAVE_MFPU_NEON_SWITCH)
+IF(HAVE_MFPU_NEON_SWITCH)
+    SET(FPU_NEON_SWITCH "-mfpu=neon")
+ENDIF()
 
-set(FPMATH_SET "0")
-if (CMAKE_SIZEOF_VOID_P MATCHES "4")
-    if (SSE_SWITCH OR MSVC)
-        option(ALSOFT_ENABLE_SSE_CODEGEN "Enable SSE code generation instead of x87 for 32-bit targets." TRUE)
-    endif ()
-    if (SSE2_SWITCH OR MSVC)
-        option(ALSOFT_ENABLE_SSE2_CODEGEN "Enable SSE2 code generation instead of x87 for 32-bit targets." TRUE)
-    endif ()
+SET(FPMATH_SET "0")
+IF(CMAKE_SIZEOF_VOID_P MATCHES "4")
+    IF(SSE_SWITCH OR MSVC)
+        OPTION(ALSOFT_ENABLE_SSE_CODEGEN "Enable SSE code generation instead of x87 for 32-bit targets." TRUE)
+    ENDIF()
+    IF(SSE2_SWITCH OR MSVC)
+        OPTION(ALSOFT_ENABLE_SSE2_CODEGEN "Enable SSE2 code generation instead of x87 for 32-bit targets." TRUE)
+    ENDIF()
 
-    if (ALSOFT_ENABLE_SSE2_CODEGEN)
-        if (SSE2_SWITCH)
-            check_c_compiler_flag("${SSE2_SWITCH} -mfpmath=sse" HAVE_MFPMATH_SSE_2)
-            if (HAVE_MFPMATH_SSE_2)
-                set(C_FLAGS ${C_FLAGS} ${SSE2_SWITCH} -mfpmath=sse)
-                set(FPMATH_SET 2)
-            endif ()
+    IF(ALSOFT_ENABLE_SSE2_CODEGEN)
+        IF(SSE2_SWITCH)
+            CHECK_C_COMPILER_FLAG("${SSE2_SWITCH} -mfpmath=sse" HAVE_MFPMATH_SSE_2)
+            IF(HAVE_MFPMATH_SSE_2)
+                SET(C_FLAGS ${C_FLAGS} ${SSE2_SWITCH} -mfpmath=sse)
+                SET(FPMATH_SET 2)
+            ENDIF()
         ELSEIF(MSVC)
-            check_c_compiler_flag("/arch:SSE2" HAVE_ARCH_SSE2)
-            if (HAVE_ARCH_SSE2)
-                set(C_FLAGS ${C_FLAGS} "/arch:SSE2")
-                set(FPMATH_SET 2)
-            endif ()
-        endif ()
-    endif ()
-    if (ALSOFT_ENABLE_SSE_CODEGEN AND NOT FPMATH_SET)
-        if (SSE_SWITCH)
-            check_c_compiler_flag("${SSE_SWITCH} -mfpmath=sse" HAVE_MFPMATH_SSE)
-            if (HAVE_MFPMATH_SSE)
-                set(C_FLAGS ${C_FLAGS} ${SSE_SWITCH} -mfpmath=sse)
-                set(FPMATH_SET 1)
-            endif ()
+            CHECK_C_COMPILER_FLAG("/arch:SSE2" HAVE_ARCH_SSE2)
+            IF(HAVE_ARCH_SSE2)
+                SET(C_FLAGS ${C_FLAGS} "/arch:SSE2")
+                SET(FPMATH_SET 2)
+            ENDIF()
+        ENDIF()
+    ENDIF()
+    IF(ALSOFT_ENABLE_SSE_CODEGEN AND NOT FPMATH_SET)
+        IF(SSE_SWITCH)
+            CHECK_C_COMPILER_FLAG("${SSE_SWITCH} -mfpmath=sse" HAVE_MFPMATH_SSE)
+            IF(HAVE_MFPMATH_SSE)
+                SET(C_FLAGS ${C_FLAGS} ${SSE_SWITCH} -mfpmath=sse)
+                SET(FPMATH_SET 1)
+            ENDIF()
         ELSEIF(MSVC)
-            check_c_compiler_flag("/arch:SSE" HAVE_ARCH_SSE)
-            if (HAVE_ARCH_SSE)
-                set(C_FLAGS ${C_FLAGS} "/arch:SSE")
-                set(FPMATH_SET 1)
-            endif ()
-        endif ()
-    endif ()
-endif ()
+            CHECK_C_COMPILER_FLAG("/arch:SSE" HAVE_ARCH_SSE)
+            IF(HAVE_ARCH_SSE)
+                SET(C_FLAGS ${C_FLAGS} "/arch:SSE")
+                SET(FPMATH_SET 1)
+            ENDIF()
+        ENDIF()
+    ENDIF()
+ENDIF()
 
 
-check_c_source_compiles("int foo(const char *str, ...) __attribute__((format(printf, 1, 2)));
+CHECK_C_SOURCE_COMPILES("int foo(const char *str, ...) __attribute__((format(printf, 1, 2)));
                          int main() {return 0;}" HAVE_GCC_FORMAT)
 
-check_include_file(stdbool.h HAVE_STDBOOL_H)
-check_include_file(stdalign.h HAVE_STDALIGN_H)
-check_include_file(malloc.h HAVE_MALLOC_H)
-check_include_file(dirent.h HAVE_DIRENT_H)
-check_include_file(strings.h HAVE_STRINGS_H)
-check_include_file(cpuid.h HAVE_CPUID_H)
-check_include_file(intrin.h HAVE_INTRIN_H)
-check_include_file(sys/sysconf.h HAVE_SYS_SYSCONF_H)
-check_include_file(fenv.h HAVE_FENV_H)
-check_include_file(float.h HAVE_FLOAT_H)
-check_include_file(ieeefp.h HAVE_IEEEFP_H)
-check_include_file(guiddef.h HAVE_GUIDDEF_H)
-if (NOT HAVE_GUIDDEF_H)
-    check_include_file(initguid.h HAVE_INITGUID_H)
-endif ()
+CHECK_INCLUDE_FILE(stdbool.h HAVE_STDBOOL_H)
+CHECK_INCLUDE_FILE(stdalign.h HAVE_STDALIGN_H)
+CHECK_INCLUDE_FILE(malloc.h HAVE_MALLOC_H)
+CHECK_INCLUDE_FILE(dirent.h HAVE_DIRENT_H)
+CHECK_INCLUDE_FILE(strings.h HAVE_STRINGS_H)
+CHECK_INCLUDE_FILE(cpuid.h HAVE_CPUID_H)
+CHECK_INCLUDE_FILE(intrin.h HAVE_INTRIN_H)
+CHECK_INCLUDE_FILE(sys/sysconf.h HAVE_SYS_SYSCONF_H)
+CHECK_INCLUDE_FILE(fenv.h HAVE_FENV_H)
+CHECK_INCLUDE_FILE(float.h HAVE_FLOAT_H)
+CHECK_INCLUDE_FILE(ieeefp.h HAVE_IEEEFP_H)
+CHECK_INCLUDE_FILE(guiddef.h HAVE_GUIDDEF_H)
+IF(NOT HAVE_GUIDDEF_H)
+    CHECK_INCLUDE_FILE(initguid.h HAVE_INITGUID_H)
+ENDIF()
 
 # Some systems need libm for some of the following math functions to work
-set(MATH_LIB )
-check_library_exists(m pow "" HAVE_LIBM)
-if (HAVE_LIBM)
-    set(MATH_LIB ${MATH_LIB} m)
-    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} m)
-endif ()
+SET(MATH_LIB )
+CHECK_LIBRARY_EXISTS(m pow "" HAVE_LIBM)
+IF(HAVE_LIBM)
+    SET(MATH_LIB ${MATH_LIB} m)
+    SET(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} m)
+ENDIF()
 
 # Check for the dlopen API (for dynamicly loading backend libs)
-if (ALSOFT_DLOPEN)
-    check_library_exists(dl dlopen "" HAVE_LIBDL)
-    if (HAVE_LIBDL)
-        set(EXTRA_LIBS dl ${EXTRA_LIBS})
-        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} dl)
-    endif ()
+IF(ALSOFT_DLOPEN)
+    CHECK_LIBRARY_EXISTS(dl dlopen "" HAVE_LIBDL)
+    IF(HAVE_LIBDL)
+        SET(EXTRA_LIBS dl ${EXTRA_LIBS})
+        SET(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} dl)
+    ENDIF()
 
-    check_include_file(dlfcn.h HAVE_DLFCN_H)
-endif ()
+    CHECK_INCLUDE_FILE(dlfcn.h HAVE_DLFCN_H)
+ENDIF()
 
 # Check for a cpuid intrinsic
-if (HAVE_CPUID_H)
-    check_c_source_compiles("#include <cpuid.h>
+IF(HAVE_CPUID_H)
+    CHECK_C_SOURCE_COMPILES("#include <cpuid.h>
         int main()
         {
             unsigned int eax, ebx, ecx, edx;
             return __get_cpuid(0, &eax, &ebx, &ecx, &edx);
         }" HAVE_GCC_GET_CPUID)
-endif ()
-if (HAVE_INTRIN_H)
-    check_c_source_compiles("#include <intrin.h>
+ENDIF()
+IF(HAVE_INTRIN_H)
+    CHECK_C_SOURCE_COMPILES("#include <intrin.h>
         int main()
         {
             int regs[4];
             __cpuid(regs, 0);
             return regs[0];
         }" HAVE_CPUID_INTRINSIC)
-    check_c_source_compiles("#include <intrin.h>
+    CHECK_C_SOURCE_COMPILES("#include <intrin.h>
         int main()
         {
             unsigned long idx = 0;
             _BitScanForward64(&idx, 1);
             return idx;
         }" HAVE_BITSCANFORWARD64_INTRINSIC)
-    check_c_source_compiles("#include <intrin.h>
+    CHECK_C_SOURCE_COMPILES("#include <intrin.h>
         int main()
         {
             unsigned long idx = 0;
             _BitScanForward(&idx, 1);
             return idx;
         }" HAVE_BITSCANFORWARD_INTRINSIC)
-endif ()
+ENDIF()
 
-check_symbol_exists(sysconf          unistd.h HAVE_SYSCONF)
-check_symbol_exists(aligned_alloc    stdlib.h HAVE_ALIGNED_ALLOC)
-check_symbol_exists(posix_memalign   stdlib.h HAVE_POSIX_MEMALIGN)
-check_symbol_exists(_aligned_malloc  malloc.h HAVE__ALIGNED_MALLOC)
-check_symbol_exists(proc_pidpath     libproc.h HAVE_PROC_PIDPATH)
-check_symbol_exists(lrintf math.h HAVE_LRINTF)
-check_symbol_exists(modff  math.h HAVE_MODFF)
-check_symbol_exists(log2f  math.h HAVE_LOG2F)
-set(HAVE_LOG2F ON)
-check_symbol_exists(cbrtf  math.h HAVE_CBRTF)
-check_symbol_exists(copysignf math.h HAVE_COPYSIGNF)
+CHECK_SYMBOL_EXISTS(sysconf          unistd.h HAVE_SYSCONF)
+CHECK_SYMBOL_EXISTS(aligned_alloc    stdlib.h HAVE_ALIGNED_ALLOC)
+CHECK_SYMBOL_EXISTS(posix_memalign   stdlib.h HAVE_POSIX_MEMALIGN)
+CHECK_SYMBOL_EXISTS(_aligned_malloc  malloc.h HAVE__ALIGNED_MALLOC)
+CHECK_SYMBOL_EXISTS(proc_pidpath     libproc.h HAVE_PROC_PIDPATH)
+CHECK_SYMBOL_EXISTS(lrintf math.h HAVE_LRINTF)
+CHECK_SYMBOL_EXISTS(modff  math.h HAVE_MODFF)
+CHECK_SYMBOL_EXISTS(log2f  math.h HAVE_LOG2F)
+set(HAVE_LOG2F TRUE)
+CHECK_SYMBOL_EXISTS(cbrtf  math.h HAVE_CBRTF)
+CHECK_SYMBOL_EXISTS(copysignf math.h HAVE_COPYSIGNF)
 
-if (HAVE_FLOAT_H)
-    check_symbol_exists(_controlfp float.h HAVE__CONTROLFP)
-    check_symbol_exists(__control87_2 float.h HAVE___CONTROL87_2)
-endif ()
+IF(HAVE_FLOAT_H)
+    CHECK_SYMBOL_EXISTS(_controlfp float.h HAVE__CONTROLFP)
+    CHECK_SYMBOL_EXISTS(__control87_2 float.h HAVE___CONTROL87_2)
+ENDIF()
 
-check_function_exists(stat HAVE_STAT)
-check_function_exists(strtof HAVE_STRTOF)
-check_function_exists(strcasecmp HAVE_STRCASECMP)
-if (NOT HAVE_STRCASECMP)
-    check_function_exists(_stricmp HAVE__STRICMP)
-    if (NOT HAVE__STRICMP)
-        message(FATAL_ERROR "No case-insensitive compare function found, please report!")
-    endif ()
+CHECK_FUNCTION_EXISTS(stat HAVE_STAT)
+CHECK_FUNCTION_EXISTS(strtof HAVE_STRTOF)
+CHECK_FUNCTION_EXISTS(strcasecmp HAVE_STRCASECMP)
+IF(NOT HAVE_STRCASECMP)
+    CHECK_FUNCTION_EXISTS(_stricmp HAVE__STRICMP)
+    IF(NOT HAVE__STRICMP)
+        MESSAGE(FATAL_ERROR "No case-insensitive compare function found, please report!")
+    ENDIF()
 
-    set(CPP_DEFS ${CPP_DEFS} strcasecmp=_stricmp)
-endif ()
+    SET(CPP_DEFS ${CPP_DEFS} strcasecmp=_stricmp)
+ENDIF()
 
-check_function_exists(strncasecmp HAVE_STRNCASECMP)
-if (NOT HAVE_STRNCASECMP)
-    check_function_exists(_strnicmp HAVE__STRNICMP)
-    if (NOT HAVE__STRNICMP)
-        message(FATAL_ERROR "No case-insensitive size-limitted compare function found, please report!")
-    endif ()
+CHECK_FUNCTION_EXISTS(strncasecmp HAVE_STRNCASECMP)
+IF(NOT HAVE_STRNCASECMP)
+    CHECK_FUNCTION_EXISTS(_strnicmp HAVE__STRNICMP)
+    IF(NOT HAVE__STRNICMP)
+        MESSAGE(FATAL_ERROR "No case-insensitive size-limitted compare function found, please report!")
+    ENDIF()
 
-    set(CPP_DEFS ${CPP_DEFS} strncasecmp=_strnicmp)
-endif ()
+    SET(CPP_DEFS ${CPP_DEFS} strncasecmp=_strnicmp)
+ENDIF()
 
-check_symbol_exists(strnlen string.h HAVE_STRNLEN)
-check_symbol_exists(snprintf stdio.h HAVE_SNPRINTF)
-if (NOT HAVE_SNPRINTF)
-    check_function_exists(_snprintf HAVE__SNPRINTF)
-    if (NOT HAVE__SNPRINTF)
-        message(FATAL_ERROR "No snprintf function found, please report!")
-    endif ()
+CHECK_SYMBOL_EXISTS(strnlen string.h HAVE_STRNLEN)
+CHECK_SYMBOL_EXISTS(snprintf stdio.h HAVE_SNPRINTF)
+IF(NOT HAVE_SNPRINTF)
+    CHECK_FUNCTION_EXISTS(_snprintf HAVE__SNPRINTF)
+    IF(NOT HAVE__SNPRINTF)
+        MESSAGE(FATAL_ERROR "No snprintf function found, please report!")
+    ENDIF()
 
-    set(CPP_DEFS ${CPP_DEFS} snprintf=_snprintf)
-endif ()
+    SET(CPP_DEFS ${CPP_DEFS} snprintf=_snprintf)
+ENDIF()
 
-check_symbol_exists(isfinite math.h HAVE_ISFINITE)
-if (NOT HAVE_ISFINITE)
-    check_function_exists(finite HAVE_FINITE)
-    if (NOT HAVE_FINITE)
-        check_function_exists(_finite HAVE__FINITE)
-        if (NOT HAVE__FINITE)
-            message(FATAL_ERROR "No isfinite function found, please report!")
-        endif ()
-        set(CPP_DEFS ${CPP_DEFS} isfinite=_finite)
-    else ()
-        set(CPP_DEFS ${CPP_DEFS} isfinite=finite)
-    endif ()
-endif ()
+CHECK_SYMBOL_EXISTS(isfinite math.h HAVE_ISFINITE)
+IF(NOT HAVE_ISFINITE)
+    CHECK_FUNCTION_EXISTS(finite HAVE_FINITE)
+    IF(NOT HAVE_FINITE)
+        CHECK_FUNCTION_EXISTS(_finite HAVE__FINITE)
+        IF(NOT HAVE__FINITE)
+            MESSAGE(FATAL_ERROR "No isfinite function found, please report!")
+        ENDIF()
+        SET(CPP_DEFS ${CPP_DEFS} isfinite=_finite)
+    ELSE()
+        SET(CPP_DEFS ${CPP_DEFS} isfinite=finite)
+    ENDIF()
+ENDIF()
 
-check_symbol_exists(isnan math.h HAVE_ISNAN)
-if (NOT HAVE_ISNAN)
-    check_function_exists(_isnan HAVE__ISNAN)
-    if (NOT HAVE__ISNAN)
-        message(FATAL_ERROR "No isnan function found, please report!")
-    endif ()
+CHECK_SYMBOL_EXISTS(isnan math.h HAVE_ISNAN)
+IF(NOT HAVE_ISNAN)
+    CHECK_FUNCTION_EXISTS(_isnan HAVE__ISNAN)
+    IF(NOT HAVE__ISNAN)
+        MESSAGE(FATAL_ERROR "No isnan function found, please report!")
+    ENDIF()
 
-    set(CPP_DEFS ${CPP_DEFS} isnan=_isnan)
-endif ()
+    SET(CPP_DEFS ${CPP_DEFS} isnan=_isnan)
+ENDIF()
 
 
 # Check if we have Windows headers
-set(OLD_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS})
-set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_WIN32_WINNT=0x0502)
-check_include_file(windows.h HAVE_WINDOWS_H)
-set(CMAKE_REQUIRED_DEFINITIONS ${OLD_REQUIRED_DEFINITIONS})
-unset(OLD_REQUIRED_DEFINITIONS)
+SET(OLD_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS})
+SET(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_WIN32_WINNT=0x0502)
+CHECK_INCLUDE_FILE(windows.h HAVE_WINDOWS_H)
+SET(CMAKE_REQUIRED_DEFINITIONS ${OLD_REQUIRED_DEFINITIONS})
+UNSET(OLD_REQUIRED_DEFINITIONS)
 
-if (NOT HAVE_WINDOWS_H)
-    check_symbol_exists(gettimeofday sys/time.h HAVE_GETTIMEOFDAY)
-    if (NOT HAVE_GETTIMEOFDAY)
-        message(FATAL_ERROR "No timing function found!")
-    endif ()
+IF(NOT HAVE_WINDOWS_H)
+    CHECK_SYMBOL_EXISTS(gettimeofday sys/time.h HAVE_GETTIMEOFDAY)
+    IF(NOT HAVE_GETTIMEOFDAY)
+        MESSAGE(FATAL_ERROR "No timing function found!")
+    ENDIF()
 
-    check_symbol_exists(nanosleep time.h HAVE_NANOSLEEP)
-    if (NOT HAVE_NANOSLEEP)
-        message(FATAL_ERROR "No sleep function found!")
-    endif ()
+    CHECK_SYMBOL_EXISTS(nanosleep time.h HAVE_NANOSLEEP)
+    IF(NOT HAVE_NANOSLEEP)
+        MESSAGE(FATAL_ERROR "No sleep function found!")
+    ENDIF()
 
     # We need pthreads outside of Windows
-    check_include_file(pthread.h HAVE_PTHREAD_H)
-    if (NOT HAVE_PTHREAD_H)
-        message(FATAL_ERROR "PThreads is required for non-Windows builds!")
-    endif ()
+    CHECK_INCLUDE_FILE(pthread.h HAVE_PTHREAD_H)
+    IF(NOT HAVE_PTHREAD_H)
+        MESSAGE(FATAL_ERROR "PThreads is required for non-Windows builds!")
+    ENDIF()
     # Some systems need pthread_np.h to get recursive mutexes
-    check_include_files("pthread.h;pthread_np.h" HAVE_PTHREAD_NP_H)
+    CHECK_INCLUDE_FILES("pthread.h;pthread_np.h" HAVE_PTHREAD_NP_H)
 
-    check_c_compiler_flag(-pthread HAVE_PTHREAD)
-    if (HAVE_PTHREAD)
-        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -pthread")
-        set(C_FLAGS ${C_FLAGS} -pthread)
-        set(LINKER_FLAGS ${LINKER_FLAGS} -pthread)
-    endif ()
+    CHECK_C_COMPILER_FLAG(-pthread HAVE_PTHREAD)
+    IF(HAVE_PTHREAD)
+        SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -pthread")
+        SET(C_FLAGS ${C_FLAGS} -pthread)
+        SET(LINKER_FLAGS ${LINKER_FLAGS} -pthread)
+    ENDIF()
 
-    check_library_exists(pthread pthread_create "" HAVE_LIBPTHREAD)
-    if (HAVE_LIBPTHREAD)
-        set(EXTRA_LIBS pthread ${EXTRA_LIBS})
-    endif ()
+    CHECK_LIBRARY_EXISTS(pthread pthread_create "" HAVE_LIBPTHREAD)
+    IF(HAVE_LIBPTHREAD)
+        SET(EXTRA_LIBS pthread ${EXTRA_LIBS})
+    ENDIF()
 
-    check_symbol_exists(pthread_setschedparam pthread.h HAVE_PTHREAD_SETSCHEDPARAM)
+    CHECK_SYMBOL_EXISTS(pthread_setschedparam pthread.h HAVE_PTHREAD_SETSCHEDPARAM)
 
-    if (HAVE_PTHREAD_NP_H)
-        check_symbol_exists(pthread_setname_np "pthread.h;pthread_np.h" HAVE_PTHREAD_SETNAME_NP)
-        if (NOT HAVE_PTHREAD_SETNAME_NP)
-            check_symbol_exists(pthread_set_name_np "pthread.h;pthread_np.h" HAVE_PTHREAD_SET_NAME_NP)
-        else ()
-            check_c_source_compiles("
+    IF(HAVE_PTHREAD_NP_H)
+        CHECK_SYMBOL_EXISTS(pthread_setname_np "pthread.h;pthread_np.h" HAVE_PTHREAD_SETNAME_NP)
+        IF(NOT HAVE_PTHREAD_SETNAME_NP)
+            CHECK_SYMBOL_EXISTS(pthread_set_name_np "pthread.h;pthread_np.h" HAVE_PTHREAD_SET_NAME_NP)
+        ELSE()
+            CHECK_C_SOURCE_COMPILES("
 #include <pthread.h>
 #include <pthread_np.h>
 int main()
@@ -675,7 +675,7 @@ int main()
 }"
                 PTHREAD_SETNAME_NP_ONE_PARAM
             )
-            check_c_source_compiles("
+            CHECK_C_SOURCE_COMPILES("
 #include <pthread.h>
 #include <pthread_np.h>
 int main()
@@ -685,14 +685,14 @@ int main()
 }"
                 PTHREAD_SETNAME_NP_THREE_PARAMS
             )
-        endif ()
-        check_symbol_exists(pthread_mutexattr_setkind_np "pthread.h;pthread_np.h" HAVE_PTHREAD_MUTEXATTR_SETKIND_NP)
-    else ()
-        check_symbol_exists(pthread_setname_np pthread.h HAVE_PTHREAD_SETNAME_NP)
-        if (NOT HAVE_PTHREAD_SETNAME_NP)
-            check_symbol_exists(pthread_set_name_np pthread.h HAVE_PTHREAD_SET_NAME_NP)
-        else ()
-            check_c_source_compiles("
+        ENDIF()
+        CHECK_SYMBOL_EXISTS(pthread_mutexattr_setkind_np "pthread.h;pthread_np.h" HAVE_PTHREAD_MUTEXATTR_SETKIND_NP)
+    ELSE()
+        CHECK_SYMBOL_EXISTS(pthread_setname_np pthread.h HAVE_PTHREAD_SETNAME_NP)
+        IF(NOT HAVE_PTHREAD_SETNAME_NP)
+            CHECK_SYMBOL_EXISTS(pthread_set_name_np pthread.h HAVE_PTHREAD_SET_NAME_NP)
+        ELSE()
+            CHECK_C_SOURCE_COMPILES("
 #include <pthread.h>
 int main()
 {
@@ -701,7 +701,7 @@ int main()
 }"
                 PTHREAD_SETNAME_NP_ONE_PARAM
             )
-            check_c_source_compiles("
+            CHECK_C_SOURCE_COMPILES("
 #include <pthread.h>
 int main()
 {
@@ -710,40 +710,40 @@ int main()
 }"
                 PTHREAD_SETNAME_NP_THREE_PARAMS
             )
-        endif ()
-        check_symbol_exists(pthread_mutexattr_setkind_np pthread.h HAVE_PTHREAD_MUTEXATTR_SETKIND_NP)
-    endif ()
+        ENDIF()
+        CHECK_SYMBOL_EXISTS(pthread_mutexattr_setkind_np pthread.h HAVE_PTHREAD_MUTEXATTR_SETKIND_NP)
+    ENDIF()
 
-    check_symbol_exists(pthread_mutex_timedlock pthread.h HAVE_PTHREAD_MUTEX_TIMEDLOCK)
+    CHECK_SYMBOL_EXISTS(pthread_mutex_timedlock pthread.h HAVE_PTHREAD_MUTEX_TIMEDLOCK)
 
-    check_library_exists(rt clock_gettime "" HAVE_LIBRT)
-    if (HAVE_LIBRT)
-        set(EXTRA_LIBS rt ${EXTRA_LIBS})
-    endif ()
-endif ()
+    CHECK_LIBRARY_EXISTS(rt clock_gettime "" HAVE_LIBRT)
+    IF(HAVE_LIBRT)
+        SET(EXTRA_LIBS rt ${EXTRA_LIBS})
+    ENDIF()
+ENDIF()
 
-check_symbol_exists(getopt unistd.h HAVE_GETOPT)
+CHECK_SYMBOL_EXISTS(getopt unistd.h HAVE_GETOPT)
 
 # Check for a 64-bit type
-check_include_file(stdint.h HAVE_STDINT_H)
-if (NOT HAVE_STDINT_H)
-    if (HAVE_WINDOWS_H)
-        check_c_source_compiles("#define _WIN32_WINNT 0x0502
+CHECK_INCLUDE_FILE(stdint.h HAVE_STDINT_H)
+IF(NOT HAVE_STDINT_H)
+    IF(HAVE_WINDOWS_H)
+        CHECK_C_SOURCE_COMPILES("#define _WIN32_WINNT 0x0502
                                  #include <windows.h>
                                  __int64 foo;
                                  int main() {return 0;}" HAVE___INT64)
-    endif ()
-    if (NOT HAVE___INT64)
-        if (NOT SIZEOF_LONG MATCHES "8")
-            if (NOT SIZEOF_LONG_LONG MATCHES "8")
-                message(FATAL_ERROR "No 64-bit types found, please report!")
-            endif ()
-        endif ()
-    endif ()
-endif ()
+    ENDIF()
+    IF(NOT HAVE___INT64)
+        IF(NOT SIZEOF_LONG MATCHES "8")
+            IF(NOT SIZEOF_LONG_LONG MATCHES "8")
+                MESSAGE(FATAL_ERROR "No 64-bit types found, please report!")
+            ENDIF()
+        ENDIF()
+    ENDIF()
+ENDIF()
 
 
-set(COMMON_OBJS
+SET(COMMON_OBJS
     common/alcomplex.c
     common/alcomplex.h
     common/align.h
@@ -761,7 +761,7 @@ set(COMMON_OBJS
     common/uintmap.c
     common/uintmap.h
 )
-set(OPENAL_OBJS
+SET(OPENAL_OBJS
     OpenAL32/Include/bs2b.h
     OpenAL32/Include/alMain.h
     OpenAL32/Include/alu.h
@@ -786,7 +786,7 @@ set(OPENAL_OBJS
     OpenAL32/Include/sample_cvt.h
     OpenAL32/sample_cvt.c
 )
-set(ALC_OBJS
+SET(ALC_OBJS
     Alc/ALc.c
     Alc/ALu.c
     Alc/alconfig.c
@@ -840,142 +840,142 @@ set(ALC_OBJS
 )
 
 
-set(CPU_EXTS "Default")
-set(HAVE_SSE        0)
-set(HAVE_SSE2       0)
-set(HAVE_SSE3       0)
-set(HAVE_SSE4_1     0)
-set(HAVE_NEON       0)
+SET(CPU_EXTS "Default")
+SET(HAVE_SSE        0)
+SET(HAVE_SSE2       0)
+SET(HAVE_SSE3       0)
+SET(HAVE_SSE4_1     0)
+SET(HAVE_NEON       0)
 
-set(HAVE_ALSA       0)
-set(HAVE_OSS        0)
-set(HAVE_SOLARIS    0)
-set(HAVE_SNDIO      0)
-set(HAVE_QSA        0)
-set(HAVE_DSOUND     0)
-set(HAVE_WASAPI     0)
-set(HAVE_WINMM      0)
-set(HAVE_PORTAUDIO  0)
-set(HAVE_PULSEAUDIO 0)
-set(HAVE_COREAUDIO  0)
-set(HAVE_OPENSL     0)
-set(HAVE_WAVE       0)
-set(HAVE_SDL2       0)
+SET(HAVE_ALSA       0)
+SET(HAVE_OSS        0)
+SET(HAVE_SOLARIS    0)
+SET(HAVE_SNDIO      0)
+SET(HAVE_QSA        0)
+SET(HAVE_DSOUND     0)
+SET(HAVE_WASAPI     0)
+SET(HAVE_WINMM      0)
+SET(HAVE_PORTAUDIO  0)
+SET(HAVE_PULSEAUDIO 0)
+SET(HAVE_COREAUDIO  0)
+SET(HAVE_OPENSL     0)
+SET(HAVE_WAVE       0)
+SET(HAVE_SDL2       0)
 
 # Check for SSE support
-option(ALSOFT_REQUIRE_SSE "Require SSE support" OFF)
-check_include_file(xmmintrin.h HAVE_XMMINTRIN_H "${SSE_SWITCH}")
-if (HAVE_XMMINTRIN_H)
-    option(ALSOFT_CPUEXT_SSE "Enable SSE support" ON)
-    if (ALSOFT_CPUEXT_SSE)
-        if (ALIGN_DECL OR HAVE_C11_ALIGNAS)
-            set(HAVE_SSE 1)
-            set(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_sse.c)
-            if (SSE_SWITCH)
+OPTION(ALSOFT_REQUIRE_SSE "Require SSE support" OFF)
+CHECK_INCLUDE_FILE(xmmintrin.h HAVE_XMMINTRIN_H "${SSE_SWITCH}")
+IF(HAVE_XMMINTRIN_H)
+    OPTION(ALSOFT_CPUEXT_SSE "Enable SSE support" ON)
+    IF(ALSOFT_CPUEXT_SSE)
+        IF(ALIGN_DECL OR HAVE_C11_ALIGNAS)
+            SET(HAVE_SSE 1)
+            SET(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_sse.c)
+            IF(SSE_SWITCH)
                 SET_SOURCE_FILES_PROPERTIES(Alc/mixer/mixer_sse.c PROPERTIES
                                             COMPILE_FLAGS "${SSE_SWITCH}")
-            endif ()
-            set(CPU_EXTS "${CPU_EXTS}, SSE")
-        endif ()
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_SSE AND NOT HAVE_SSE)
-    message(FATAL_ERROR "Failed to enabled required SSE CPU extensions")
-endif ()
+            ENDIF()
+            SET(CPU_EXTS "${CPU_EXTS}, SSE")
+        ENDIF()
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_SSE AND NOT HAVE_SSE)
+    MESSAGE(FATAL_ERROR "Failed to enabled required SSE CPU extensions")
+ENDIF()
 
-option(ALSOFT_REQUIRE_SSE2 "Require SSE2 support" OFF)
-check_include_file(emmintrin.h HAVE_EMMINTRIN_H "${SSE2_SWITCH}")
-if (HAVE_EMMINTRIN_H)
-    option(ALSOFT_CPUEXT_SSE2 "Enable SSE2 support" ON)
-    if (HAVE_SSE AND ALSOFT_CPUEXT_SSE2)
-        if (ALIGN_DECL OR HAVE_C11_ALIGNAS)
-            set(HAVE_SSE2 1)
-            set(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_sse2.c)
-            if (SSE2_SWITCH)
+OPTION(ALSOFT_REQUIRE_SSE2 "Require SSE2 support" OFF)
+CHECK_INCLUDE_FILE(emmintrin.h HAVE_EMMINTRIN_H "${SSE2_SWITCH}")
+IF(HAVE_EMMINTRIN_H)
+    OPTION(ALSOFT_CPUEXT_SSE2 "Enable SSE2 support" ON)
+    IF(HAVE_SSE AND ALSOFT_CPUEXT_SSE2)
+        IF(ALIGN_DECL OR HAVE_C11_ALIGNAS)
+            SET(HAVE_SSE2 1)
+            SET(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_sse2.c)
+            IF(SSE2_SWITCH)
                 SET_SOURCE_FILES_PROPERTIES(Alc/mixer/mixer_sse2.c PROPERTIES
                                             COMPILE_FLAGS "${SSE2_SWITCH}")
-            endif ()
-            set(CPU_EXTS "${CPU_EXTS}, SSE2")
-        endif ()
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_SSE2 AND NOT HAVE_SSE2)
-    message(FATAL_ERROR "Failed to enable required SSE2 CPU extensions")
-endif ()
+            ENDIF()
+            SET(CPU_EXTS "${CPU_EXTS}, SSE2")
+        ENDIF()
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_SSE2 AND NOT HAVE_SSE2)
+    MESSAGE(FATAL_ERROR "Failed to enable required SSE2 CPU extensions")
+ENDIF()
 
-option(ALSOFT_REQUIRE_SSE3 "Require SSE3 support" OFF)
-check_include_file(pmmintrin.h HAVE_PMMINTRIN_H "${SSE3_SWITCH}")
-if (HAVE_EMMINTRIN_H)
-    option(ALSOFT_CPUEXT_SSE3 "Enable SSE3 support" ON)
-    if (HAVE_SSE2 AND ALSOFT_CPUEXT_SSE3)
-        if (ALIGN_DECL OR HAVE_C11_ALIGNAS)
-            set(HAVE_SSE3 1)
-            set(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_sse3.c)
-            if (SSE2_SWITCH)
+OPTION(ALSOFT_REQUIRE_SSE3 "Require SSE3 support" OFF)
+CHECK_INCLUDE_FILE(pmmintrin.h HAVE_PMMINTRIN_H "${SSE3_SWITCH}")
+IF(HAVE_EMMINTRIN_H)
+    OPTION(ALSOFT_CPUEXT_SSE3 "Enable SSE3 support" ON)
+    IF(HAVE_SSE2 AND ALSOFT_CPUEXT_SSE3)
+        IF(ALIGN_DECL OR HAVE_C11_ALIGNAS)
+            SET(HAVE_SSE3 1)
+            SET(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_sse3.c)
+            IF(SSE2_SWITCH)
                 SET_SOURCE_FILES_PROPERTIES(Alc/mixer/mixer_sse3.c PROPERTIES
                                             COMPILE_FLAGS "${SSE3_SWITCH}")
-            endif ()
-            set(CPU_EXTS "${CPU_EXTS}, SSE3")
-        endif ()
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_SSE3 AND NOT HAVE_SSE3)
-    message(FATAL_ERROR "Failed to enable required SSE3 CPU extensions")
-endif ()
+            ENDIF()
+            SET(CPU_EXTS "${CPU_EXTS}, SSE3")
+        ENDIF()
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_SSE3 AND NOT HAVE_SSE3)
+    MESSAGE(FATAL_ERROR "Failed to enable required SSE3 CPU extensions")
+ENDIF()
 
-option(ALSOFT_REQUIRE_SSE4_1 "Require SSE4.1 support" OFF)
-check_include_file(smmintrin.h HAVE_SMMINTRIN_H "${SSE4_1_SWITCH}")
-if (HAVE_SMMINTRIN_H)
-    option(ALSOFT_CPUEXT_SSE4_1 "Enable SSE4.1 support" ON)
-    if (HAVE_SSE2 AND ALSOFT_CPUEXT_SSE4_1)
-        if (ALIGN_DECL OR HAVE_C11_ALIGNAS)
-            set(HAVE_SSE4_1 1)
-            set(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_sse41.c)
-            if (SSE4_1_SWITCH)
+OPTION(ALSOFT_REQUIRE_SSE4_1 "Require SSE4.1 support" OFF)
+CHECK_INCLUDE_FILE(smmintrin.h HAVE_SMMINTRIN_H "${SSE4_1_SWITCH}")
+IF(HAVE_SMMINTRIN_H)
+    OPTION(ALSOFT_CPUEXT_SSE4_1 "Enable SSE4.1 support" ON)
+    IF(HAVE_SSE2 AND ALSOFT_CPUEXT_SSE4_1)
+        IF(ALIGN_DECL OR HAVE_C11_ALIGNAS)
+            SET(HAVE_SSE4_1 1)
+            SET(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_sse41.c)
+            IF(SSE4_1_SWITCH)
                 SET_SOURCE_FILES_PROPERTIES(Alc/mixer/mixer_sse41.c PROPERTIES
                                             COMPILE_FLAGS "${SSE4_1_SWITCH}")
-            endif ()
-            set(CPU_EXTS "${CPU_EXTS}, SSE4.1")
-        endif ()
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_SSE4_1 AND NOT HAVE_SSE4_1)
-    message(FATAL_ERROR "Failed to enable required SSE4.1 CPU extensions")
-endif ()
+            ENDIF()
+            SET(CPU_EXTS "${CPU_EXTS}, SSE4.1")
+        ENDIF()
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_SSE4_1 AND NOT HAVE_SSE4_1)
+    MESSAGE(FATAL_ERROR "Failed to enable required SSE4.1 CPU extensions")
+ENDIF()
 
 # Check for ARM Neon support
-option(ALSOFT_REQUIRE_NEON "Require ARM Neon support" OFF)
-check_include_file(arm_neon.h HAVE_ARM_NEON_H ${FPU_NEON_SWITCH})
-if (HAVE_ARM_NEON_H)
-    option(ALSOFT_CPUEXT_NEON "Enable ARM Neon support" ON)
-    if (ALSOFT_CPUEXT_NEON)
-        set(HAVE_NEON 1)
-        set(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_neon.c)
-        if (FPU_NEON_SWITCH)
+OPTION(ALSOFT_REQUIRE_NEON "Require ARM Neon support" OFF)
+CHECK_INCLUDE_FILE(arm_neon.h HAVE_ARM_NEON_H ${FPU_NEON_SWITCH})
+IF(HAVE_ARM_NEON_H)
+    OPTION(ALSOFT_CPUEXT_NEON "Enable ARM Neon support" ON)
+    IF(ALSOFT_CPUEXT_NEON)
+        SET(HAVE_NEON 1)
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/mixer/mixer_neon.c)
+        IF(FPU_NEON_SWITCH)
             SET_SOURCE_FILES_PROPERTIES(Alc/mixer/mixer_neon.c PROPERTIES
                                         COMPILE_FLAGS "${FPU_NEON_SWITCH}")
-        endif ()
-        set(CPU_EXTS "${CPU_EXTS}, Neon")
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_NEON AND NOT HAVE_NEON)
-    message(FATAL_ERROR "Failed to enabled required ARM Neon CPU extensions")
-endif ()
+        ENDIF()
+        SET(CPU_EXTS "${CPU_EXTS}, Neon")
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_NEON AND NOT HAVE_NEON)
+    MESSAGE(FATAL_ERROR "Failed to enabled required ARM Neon CPU extensions")
+ENDIF()
 
 
-if (WIN32 OR HAVE_DLFCN_H)
-    set(IS_LINKED "")
+IF(WIN32 OR HAVE_DLFCN_H)
+    SET(IS_LINKED "")
     MACRO(ADD_BACKEND_LIBS _LIBS)
     ENDMACRO()
-else ()
-    set(IS_LINKED " (linked)")
+ELSE()
+    SET(IS_LINKED " (linked)")
     MACRO(ADD_BACKEND_LIBS _LIBS)
-        set(EXTRA_LIBS ${_LIBS} ${EXTRA_LIBS})
+        SET(EXTRA_LIBS ${_LIBS} ${EXTRA_LIBS})
     ENDMACRO()
-endif ()
+ENDIF()
 
-set(BACKENDS "")
-set(ALC_OBJS  ${ALC_OBJS}
+SET(BACKENDS "")
+SET(ALC_OBJS  ${ALC_OBJS}
     Alc/backends/base.c
     Alc/backends/base.h
     # Default backends, always available
@@ -984,867 +984,781 @@ set(ALC_OBJS  ${ALC_OBJS}
 )
 
 # Check ALSA backend
-option(ALSOFT_REQUIRE_ALSA "Require ALSA backend" OFF)
-find_package(ALSA)
-if (ALSA_FOUND)
-    option(ALSOFT_BACKEND_ALSA "Enable ALSA backend" ON)
-    if (ALSOFT_BACKEND_ALSA)
-        set(HAVE_ALSA 1)
-        set(BACKENDS  "${BACKENDS} ALSA${IS_LINKED},")
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/alsa.c)
+OPTION(ALSOFT_REQUIRE_ALSA "Require ALSA backend" OFF)
+FIND_PACKAGE(ALSA)
+IF(ALSA_FOUND)
+    OPTION(ALSOFT_BACKEND_ALSA "Enable ALSA backend" ON)
+    IF(ALSOFT_BACKEND_ALSA)
+        SET(HAVE_ALSA 1)
+        SET(BACKENDS  "${BACKENDS} ALSA${IS_LINKED},")
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/alsa.c)
         ADD_BACKEND_LIBS(${ALSA_LIBRARIES})
-        set(INC_PATHS ${INC_PATHS} ${ALSA_INCLUDE_DIRS})
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_ALSA AND NOT HAVE_ALSA)
-    message(FATAL_ERROR "Failed to enabled required ALSA backend")
-endif ()
+        SET(INC_PATHS ${INC_PATHS} ${ALSA_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_ALSA AND NOT HAVE_ALSA)
+    MESSAGE(FATAL_ERROR "Failed to enabled required ALSA backend")
+ENDIF()
 
 # Check OSS backend
-option(ALSOFT_REQUIRE_OSS "Require OSS backend" OFF)
-find_package(OSS)
-if (OSS_FOUND)
-    option(ALSOFT_BACKEND_OSS "Enable OSS backend" ON)
-    if (ALSOFT_BACKEND_OSS)
-        set(HAVE_OSS 1)
-        set(BACKENDS  "${BACKENDS} OSS,")
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/oss.c)
-        if (OSS_LIBRARIES)
-            set(EXTRA_LIBS ${OSS_LIBRARIES} ${EXTRA_LIBS})
-        endif ()
-        set(INC_PATHS ${INC_PATHS} ${OSS_INCLUDE_DIRS})
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_OSS AND NOT HAVE_OSS)
-    message(FATAL_ERROR "Failed to enabled required OSS backend")
-endif ()
+OPTION(ALSOFT_REQUIRE_OSS "Require OSS backend" OFF)
+FIND_PACKAGE(OSS)
+IF(OSS_FOUND)
+    OPTION(ALSOFT_BACKEND_OSS "Enable OSS backend" ON)
+    IF(ALSOFT_BACKEND_OSS)
+        SET(HAVE_OSS 1)
+        SET(BACKENDS  "${BACKENDS} OSS,")
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/oss.c)
+        IF(OSS_LIBRARIES)
+            SET(EXTRA_LIBS ${OSS_LIBRARIES} ${EXTRA_LIBS})
+        ENDIF()
+        SET(INC_PATHS ${INC_PATHS} ${OSS_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_OSS AND NOT HAVE_OSS)
+    MESSAGE(FATAL_ERROR "Failed to enabled required OSS backend")
+ENDIF()
 
 # Check Solaris backend
-option(ALSOFT_REQUIRE_SOLARIS "Require Solaris backend" OFF)
-find_package(AudioIO)
-if (AUDIOIO_FOUND)
-    option(ALSOFT_BACKEND_SOLARIS "Enable Solaris backend" ON)
-    if (ALSOFT_BACKEND_SOLARIS)
-        set(HAVE_SOLARIS 1)
-        set(BACKENDS  "${BACKENDS} Solaris,")
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/solaris.c)
-        set(INC_PATHS ${INC_PATHS} ${AUDIOIO_INCLUDE_DIRS})
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_SOLARIS AND NOT HAVE_SOLARIS)
-    message(FATAL_ERROR "Failed to enabled required Solaris backend")
-endif ()
+OPTION(ALSOFT_REQUIRE_SOLARIS "Require Solaris backend" OFF)
+FIND_PACKAGE(AudioIO)
+IF(AUDIOIO_FOUND)
+    OPTION(ALSOFT_BACKEND_SOLARIS "Enable Solaris backend" ON)
+    IF(ALSOFT_BACKEND_SOLARIS)
+        SET(HAVE_SOLARIS 1)
+        SET(BACKENDS  "${BACKENDS} Solaris,")
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/solaris.c)
+        SET(INC_PATHS ${INC_PATHS} ${AUDIOIO_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_SOLARIS AND NOT HAVE_SOLARIS)
+    MESSAGE(FATAL_ERROR "Failed to enabled required Solaris backend")
+ENDIF()
 
 # Check SndIO backend
-option(ALSOFT_REQUIRE_SNDIO "Require SndIO backend" OFF)
-find_package(SoundIO)
-if (SOUNDIO_FOUND)
-    option(ALSOFT_BACKEND_SNDIO "Enable SndIO backend" ON)
-    if (ALSOFT_BACKEND_SNDIO)
-        set(HAVE_SNDIO 1)
-        set(BACKENDS  "${BACKENDS} SndIO (linked),")
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/sndio.c)
-        set(EXTRA_LIBS ${SOUNDIO_LIBRARIES} ${EXTRA_LIBS})
-        set(INC_PATHS ${INC_PATHS} ${SOUNDIO_INCLUDE_DIRS})
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_SNDIO AND NOT HAVE_SNDIO)
-    message(FATAL_ERROR "Failed to enabled required SndIO backend")
-endif ()
+OPTION(ALSOFT_REQUIRE_SNDIO "Require SndIO backend" OFF)
+FIND_PACKAGE(SoundIO)
+IF(SOUNDIO_FOUND)
+    OPTION(ALSOFT_BACKEND_SNDIO "Enable SndIO backend" ON)
+    IF(ALSOFT_BACKEND_SNDIO)
+        SET(HAVE_SNDIO 1)
+        SET(BACKENDS  "${BACKENDS} SndIO (linked),")
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/sndio.c)
+        SET(EXTRA_LIBS ${SOUNDIO_LIBRARIES} ${EXTRA_LIBS})
+        SET(INC_PATHS ${INC_PATHS} ${SOUNDIO_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_SNDIO AND NOT HAVE_SNDIO)
+    MESSAGE(FATAL_ERROR "Failed to enabled required SndIO backend")
+ENDIF()
 
 # Check QSA backend
-option(ALSOFT_REQUIRE_QSA "Require QSA backend" OFF)
-find_package(QSA)
-if (QSA_FOUND)
-    option(ALSOFT_BACKEND_QSA "Enable QSA backend" ON)
-    if (ALSOFT_BACKEND_QSA)
-        set(HAVE_QSA 1)
-        set(BACKENDS  "${BACKENDS} QSA (linked),")
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/qsa.c)
-        set(EXTRA_LIBS ${QSA_LIBRARIES} ${EXTRA_LIBS})
-        set(INC_PATHS ${INC_PATHS} ${QSA_INCLUDE_DIRS})
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_QSA AND NOT HAVE_QSA)
-    message(FATAL_ERROR "Failed to enabled required QSA backend")
-endif ()
+OPTION(ALSOFT_REQUIRE_QSA "Require QSA backend" OFF)
+FIND_PACKAGE(QSA)
+IF(QSA_FOUND)
+    OPTION(ALSOFT_BACKEND_QSA "Enable QSA backend" ON)
+    IF(ALSOFT_BACKEND_QSA)
+        SET(HAVE_QSA 1)
+        SET(BACKENDS  "${BACKENDS} QSA (linked),")
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/qsa.c)
+        SET(EXTRA_LIBS ${QSA_LIBRARIES} ${EXTRA_LIBS})
+        SET(INC_PATHS ${INC_PATHS} ${QSA_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_QSA AND NOT HAVE_QSA)
+    MESSAGE(FATAL_ERROR "Failed to enabled required QSA backend")
+ENDIF()
 
 # Check Windows-only backends
-option(ALSOFT_REQUIRE_WINMM "Require Windows Multimedia backend" OFF)
-option(ALSOFT_REQUIRE_DSOUND "Require DirectSound backend" OFF)
-option(ALSOFT_REQUIRE_WASAPI "Require WASAPI backend" OFF)
-if (HAVE_WINDOWS_H)
-    set(OLD_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS})
-    set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_WIN32_WINNT=0x0502)
+OPTION(ALSOFT_REQUIRE_WINMM "Require Windows Multimedia backend" OFF)
+OPTION(ALSOFT_REQUIRE_DSOUND "Require DirectSound backend" OFF)
+OPTION(ALSOFT_REQUIRE_WASAPI "Require WASAPI backend" OFF)
+IF(HAVE_WINDOWS_H)
+    SET(OLD_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS})
+    SET(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_WIN32_WINNT=0x0502)
 
     # Check MMSystem backend
-    check_include_files("windows.h;mmsystem.h" HAVE_MMSYSTEM_H)
-    if (HAVE_MMSYSTEM_H)
-        check_shared_function_exists(waveOutOpen "windows.h;mmsystem.h" winmm "" HAVE_LIBWINMM)
-        if (HAVE_LIBWINMM)
-            option(ALSOFT_BACKEND_WINMM "Enable Windows Multimedia backend" ON)
-            if (ALSOFT_BACKEND_WINMM)
-                set(HAVE_WINMM 1)
-                set(BACKENDS  "${BACKENDS} WinMM,")
-                set(ALC_OBJS  ${ALC_OBJS} Alc/backends/winmm.c)
-                set(EXTRA_LIBS winmm ${EXTRA_LIBS})
-            endif ()
-        endif ()
-    endif ()
+    CHECK_INCLUDE_FILES("windows.h;mmsystem.h" HAVE_MMSYSTEM_H)
+    IF(HAVE_MMSYSTEM_H)
+        CHECK_SHARED_FUNCTION_EXISTS(waveOutOpen "windows.h;mmsystem.h" winmm "" HAVE_LIBWINMM)
+        IF(HAVE_LIBWINMM)
+            OPTION(ALSOFT_BACKEND_WINMM "Enable Windows Multimedia backend" ON)
+            IF(ALSOFT_BACKEND_WINMM)
+                SET(HAVE_WINMM 1)
+                SET(BACKENDS  "${BACKENDS} WinMM,")
+                SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/winmm.c)
+                SET(EXTRA_LIBS winmm ${EXTRA_LIBS})
+            ENDIF()
+        ENDIF()
+    ENDIF()
 
     # Check DSound backend
-    find_package(DSound)
-    if (DSOUND_FOUND)
-        option(ALSOFT_BACKEND_DSOUND "Enable DirectSound backend" ON)
-        if (ALSOFT_BACKEND_DSOUND)
-            set(HAVE_DSOUND 1)
-            set(BACKENDS  "${BACKENDS} DirectSound${IS_LINKED},")
-            set(ALC_OBJS  ${ALC_OBJS} Alc/backends/dsound.c)
+    FIND_PACKAGE(DSound)
+    IF(DSOUND_FOUND)
+        OPTION(ALSOFT_BACKEND_DSOUND "Enable DirectSound backend" ON)
+        IF(ALSOFT_BACKEND_DSOUND)
+            SET(HAVE_DSOUND 1)
+            SET(BACKENDS  "${BACKENDS} DirectSound${IS_LINKED},")
+            SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/dsound.c)
             ADD_BACKEND_LIBS(${DSOUND_LIBRARIES})
-            set(INC_PATHS ${INC_PATHS} ${DSOUND_INCLUDE_DIRS})
-        endif ()
-    endif ()
+            SET(INC_PATHS ${INC_PATHS} ${DSOUND_INCLUDE_DIRS})
+        ENDIF()
+    ENDIF()
 
     # Check for WASAPI backend
-    check_include_file(mmdeviceapi.h HAVE_MMDEVICEAPI_H)
-    if (HAVE_MMDEVICEAPI_H)
-        option(ALSOFT_BACKEND_WASAPI "Enable WASAPI backend" ON)
-        if (ALSOFT_BACKEND_WASAPI)
-            set(HAVE_WASAPI 1)
-            set(BACKENDS  "${BACKENDS} WASAPI,")
-            set(ALC_OBJS  ${ALC_OBJS} Alc/backends/wasapi.c)
-        endif ()
-    endif ()
+    CHECK_INCLUDE_FILE(mmdeviceapi.h HAVE_MMDEVICEAPI_H)
+    IF(HAVE_MMDEVICEAPI_H)
+        OPTION(ALSOFT_BACKEND_WASAPI "Enable WASAPI backend" ON)
+        IF(ALSOFT_BACKEND_WASAPI)
+            SET(HAVE_WASAPI 1)
+            SET(BACKENDS  "${BACKENDS} WASAPI,")
+            SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/wasapi.c)
+        ENDIF()
+    ENDIF()
 
-    set(CMAKE_REQUIRED_DEFINITIONS ${OLD_REQUIRED_DEFINITIONS})
-    unset(OLD_REQUIRED_DEFINITIONS)
-endif ()
-if (ALSOFT_REQUIRE_WINMM AND NOT HAVE_WINMM)
-    message(FATAL_ERROR "Failed to enabled required WinMM backend")
-endif ()
-if (ALSOFT_REQUIRE_DSOUND AND NOT HAVE_DSOUND)
-    message(FATAL_ERROR "Failed to enabled required DSound backend")
-endif ()
-if (ALSOFT_REQUIRE_WASAPI AND NOT HAVE_WASAPI)
-    message(FATAL_ERROR "Failed to enabled required WASAPI backend")
-endif ()
+    SET(CMAKE_REQUIRED_DEFINITIONS ${OLD_REQUIRED_DEFINITIONS})
+    UNSET(OLD_REQUIRED_DEFINITIONS)
+ENDIF()
+IF(ALSOFT_REQUIRE_WINMM AND NOT HAVE_WINMM)
+    MESSAGE(FATAL_ERROR "Failed to enabled required WinMM backend")
+ENDIF()
+IF(ALSOFT_REQUIRE_DSOUND AND NOT HAVE_DSOUND)
+    MESSAGE(FATAL_ERROR "Failed to enabled required DSound backend")
+ENDIF()
+IF(ALSOFT_REQUIRE_WASAPI AND NOT HAVE_WASAPI)
+    MESSAGE(FATAL_ERROR "Failed to enabled required WASAPI backend")
+ENDIF()
 
 # Check PortAudio backend
-option(ALSOFT_REQUIRE_PORTAUDIO "Require PortAudio backend" OFF)
-find_package(PortAudio)
-if (PORTAUDIO_FOUND)
-    option(ALSOFT_BACKEND_PORTAUDIO "Enable PortAudio backend" ON)
-    if (ALSOFT_BACKEND_PORTAUDIO)
-        set(HAVE_PORTAUDIO 1)
-        set(BACKENDS  "${BACKENDS} PortAudio${IS_LINKED},")
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/portaudio.c)
+OPTION(ALSOFT_REQUIRE_PORTAUDIO "Require PortAudio backend" OFF)
+FIND_PACKAGE(PortAudio)
+IF(PORTAUDIO_FOUND)
+    OPTION(ALSOFT_BACKEND_PORTAUDIO "Enable PortAudio backend" ON)
+    IF(ALSOFT_BACKEND_PORTAUDIO)
+        SET(HAVE_PORTAUDIO 1)
+        SET(BACKENDS  "${BACKENDS} PortAudio${IS_LINKED},")
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/portaudio.c)
         ADD_BACKEND_LIBS(${PORTAUDIO_LIBRARIES})
-        set(INC_PATHS ${INC_PATHS} ${PORTAUDIO_INCLUDE_DIRS})
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_PORTAUDIO AND NOT HAVE_PORTAUDIO)
-    message(FATAL_ERROR "Failed to enabled required PortAudio backend")
-endif ()
+        SET(INC_PATHS ${INC_PATHS} ${PORTAUDIO_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_PORTAUDIO AND NOT HAVE_PORTAUDIO)
+    MESSAGE(FATAL_ERROR "Failed to enabled required PortAudio backend")
+ENDIF()
 
 # Check PulseAudio backend
-option(ALSOFT_REQUIRE_PULSEAUDIO "Require PulseAudio backend" OFF)
-find_package(PulseAudio)
-if (PULSEAUDIO_FOUND)
-    option(ALSOFT_BACKEND_PULSEAUDIO "Enable PulseAudio backend" ON)
-    if (ALSOFT_BACKEND_PULSEAUDIO)
-        set(HAVE_PULSEAUDIO 1)
-        set(BACKENDS  "${BACKENDS} PulseAudio${IS_LINKED},")
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/pulseaudio.c)
+OPTION(ALSOFT_REQUIRE_PULSEAUDIO "Require PulseAudio backend" OFF)
+FIND_PACKAGE(PulseAudio)
+IF(PULSEAUDIO_FOUND)
+    OPTION(ALSOFT_BACKEND_PULSEAUDIO "Enable PulseAudio backend" ON)
+    IF(ALSOFT_BACKEND_PULSEAUDIO)
+        SET(HAVE_PULSEAUDIO 1)
+        SET(BACKENDS  "${BACKENDS} PulseAudio${IS_LINKED},")
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/pulseaudio.c)
         ADD_BACKEND_LIBS(${PULSEAUDIO_LIBRARIES})
-        set(INC_PATHS ${INC_PATHS} ${PULSEAUDIO_INCLUDE_DIRS})
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_PULSEAUDIO AND NOT HAVE_PULSEAUDIO)
-    message(FATAL_ERROR "Failed to enabled required PulseAudio backend")
-endif ()
+        SET(INC_PATHS ${INC_PATHS} ${PULSEAUDIO_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_PULSEAUDIO AND NOT HAVE_PULSEAUDIO)
+    MESSAGE(FATAL_ERROR "Failed to enabled required PulseAudio backend")
+ENDIF()
 
 # Check JACK backend
-option(ALSOFT_REQUIRE_JACK "Require JACK backend" OFF)
-find_package(JACK)
-if (JACK_FOUND)
-    option(ALSOFT_BACKEND_JACK "Enable JACK backend" ON)
-    if (ALSOFT_BACKEND_JACK)
-        set(HAVE_JACK 1)
-        set(BACKENDS  "${BACKENDS} JACK${IS_LINKED},")
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/jack.c)
+OPTION(ALSOFT_REQUIRE_JACK "Require JACK backend" OFF)
+FIND_PACKAGE(JACK)
+IF(JACK_FOUND)
+    OPTION(ALSOFT_BACKEND_JACK "Enable JACK backend" ON)
+    IF(ALSOFT_BACKEND_JACK)
+        SET(HAVE_JACK 1)
+        SET(BACKENDS  "${BACKENDS} JACK${IS_LINKED},")
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/jack.c)
         ADD_BACKEND_LIBS(${JACK_LIBRARIES})
-        set(INC_PATHS ${INC_PATHS} ${JACK_INCLUDE_DIRS})
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_JACK AND NOT HAVE_JACK)
-    message(FATAL_ERROR "Failed to enabled required JACK backend")
-endif ()
+        SET(INC_PATHS ${INC_PATHS} ${JACK_INCLUDE_DIRS})
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_JACK AND NOT HAVE_JACK)
+    MESSAGE(FATAL_ERROR "Failed to enabled required JACK backend")
+ENDIF()
 
 # Check CoreAudio backend
-option(ALSOFT_REQUIRE_COREAUDIO "Require CoreAudio backend" OFF)
-find_library(COREAUDIO_FRAMEWORK
+OPTION(ALSOFT_REQUIRE_COREAUDIO "Require CoreAudio backend" OFF)
+FIND_LIBRARY(COREAUDIO_FRAMEWORK
              NAMES CoreAudio
              PATHS /System/Library/Frameworks
 )
-if (COREAUDIO_FRAMEWORK)
-    option(ALSOFT_BACKEND_COREAUDIO "Enable CoreAudio backend" ON)
-    if (ALSOFT_BACKEND_COREAUDIO)
-        set(HAVE_COREAUDIO 1)
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/coreaudio.c)
-        set(BACKENDS  "${BACKENDS} CoreAudio,")
-        set(EXTRA_LIBS ${COREAUDIO_FRAMEWORK} ${EXTRA_LIBS})
-        set(EXTRA_LIBS /System/Library/Frameworks/AudioUnit.framework ${EXTRA_LIBS})
-        set(EXTRA_LIBS /System/Library/Frameworks/ApplicationServices.framework ${EXTRA_LIBS})
+IF(COREAUDIO_FRAMEWORK)
+    OPTION(ALSOFT_BACKEND_COREAUDIO "Enable CoreAudio backend" ON)
+    IF(ALSOFT_BACKEND_COREAUDIO)
+        SET(HAVE_COREAUDIO 1)
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/coreaudio.c)
+        SET(BACKENDS  "${BACKENDS} CoreAudio,")
+        SET(EXTRA_LIBS ${COREAUDIO_FRAMEWORK} ${EXTRA_LIBS})
+        SET(EXTRA_LIBS /System/Library/Frameworks/AudioUnit.framework ${EXTRA_LIBS})
+        SET(EXTRA_LIBS /System/Library/Frameworks/ApplicationServices.framework ${EXTRA_LIBS})
 
         # Some versions of OSX may need the AudioToolbox framework. Add it if
         # it's found.
-        find_library(AUDIOTOOLBOX_LIBRARY
+        FIND_LIBRARY(AUDIOTOOLBOX_LIBRARY
                      NAMES AudioToolbox
                      PATHS ~/Library/Frameworks
                            /Library/Frameworks
                            /System/Library/Frameworks
                     )
-        if (AUDIOTOOLBOX_LIBRARY)
-            set(EXTRA_LIBS ${AUDIOTOOLBOX_LIBRARY} ${EXTRA_LIBS})
-        endif ()
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_COREAUDIO AND NOT HAVE_COREAUDIO)
-    message(FATAL_ERROR "Failed to enabled required CoreAudio backend")
-endif ()
+        IF(AUDIOTOOLBOX_LIBRARY)
+            SET(EXTRA_LIBS ${AUDIOTOOLBOX_LIBRARY} ${EXTRA_LIBS})
+        ENDIF()
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_COREAUDIO AND NOT HAVE_COREAUDIO)
+    MESSAGE(FATAL_ERROR "Failed to enabled required CoreAudio backend")
+ENDIF()
 
 # Check for OpenSL (Android) backend
-option(ALSOFT_REQUIRE_OPENSL "Require OpenSL backend" OFF)
-check_include_files("SLES/OpenSLES.h;SLES/OpenSLES_Android.h" HAVE_SLES_OPENSLES_ANDROID_H)
-if (HAVE_SLES_OPENSLES_ANDROID_H)
+OPTION(ALSOFT_REQUIRE_OPENSL "Require OpenSL backend" OFF)
+CHECK_INCLUDE_FILES("SLES/OpenSLES.h;SLES/OpenSLES_Android.h" HAVE_SLES_OPENSLES_ANDROID_H)
+IF(HAVE_SLES_OPENSLES_ANDROID_H)
     CHECK_SHARED_FUNCTION_EXISTS(slCreateEngine "SLES/OpenSLES.h" OpenSLES "" HAVE_LIBOPENSLES)
-    if (HAVE_LIBOPENSLES)
-        option(ALSOFT_BACKEND_OPENSL "Enable OpenSL backend" ON)
-        if (ALSOFT_BACKEND_OPENSL)
-            set(HAVE_OPENSL 1)
-            set(ALC_OBJS  ${ALC_OBJS} Alc/backends/opensl.c)
-            set(BACKENDS  "${BACKENDS} OpenSL,")
-            set(EXTRA_LIBS OpenSLES ${EXTRA_LIBS})
-        endif ()
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_OPENSL AND NOT HAVE_OPENSL)
-    message(FATAL_ERROR "Failed to enabled required OpenSL backend")
-endif ()
+    IF(HAVE_LIBOPENSLES)
+        OPTION(ALSOFT_BACKEND_OPENSL "Enable OpenSL backend" ON)
+        IF(ALSOFT_BACKEND_OPENSL)
+            SET(HAVE_OPENSL 1)
+            SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/opensl.c)
+            SET(BACKENDS  "${BACKENDS} OpenSL,")
+            SET(EXTRA_LIBS OpenSLES ${EXTRA_LIBS})
+        ENDIF()
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_OPENSL AND NOT HAVE_OPENSL)
+    MESSAGE(FATAL_ERROR "Failed to enabled required OpenSL backend")
+ENDIF()
 
 # Check for SDL2 backend
-option(ALSOFT_REQUIRE_SDL2 "Require SDL2 backend" OFF)
-find_package(SDL2)
-if (SDL2_FOUND)
+OPTION(ALSOFT_REQUIRE_SDL2 "Require SDL2 backend" OFF)
+FIND_PACKAGE(SDL2)
+IF(SDL2_FOUND)
     # Off by default, since it adds a runtime dependency
-    option(ALSOFT_BACKEND_SDL2 "Enable SDL2 backend" OFF)
-    if (ALSOFT_BACKEND_SDL2)
-        set(HAVE_SDL2 1)
-        set(ALC_OBJS  ${ALC_OBJS} Alc/backends/sdl2.c)
-        set(BACKENDS  "${BACKENDS} SDL2,")
-        set(EXTRA_LIBS ${SDL2_LIBRARY} ${EXTRA_LIBS})
-        set(INC_PATHS ${INC_PATHS} ${SDL2_INCLUDE_DIR})
-    endif ()
-endif ()
-if (ALSOFT_REQUIRE_SDL2 AND NOT SDL2_FOUND)
-    message(FATAL_ERROR "Failed to enabled required SDL2 backend")
-endif ()
+    OPTION(ALSOFT_BACKEND_SDL2 "Enable SDL2 backend" OFF)
+    IF(ALSOFT_BACKEND_SDL2)
+        SET(HAVE_SDL2 1)
+        SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/sdl2.c)
+        SET(BACKENDS  "${BACKENDS} SDL2,")
+        SET(EXTRA_LIBS ${SDL2_LIBRARY} ${EXTRA_LIBS})
+        SET(INC_PATHS ${INC_PATHS} ${SDL2_INCLUDE_DIR})
+    ENDIF()
+ENDIF()
+IF(ALSOFT_REQUIRE_SDL2 AND NOT SDL2_FOUND)
+    MESSAGE(FATAL_ERROR "Failed to enabled required SDL2 backend")
+ENDIF()
 
 # Optionally enable the Wave Writer backend
-option(ALSOFT_BACKEND_WAVE "Enable Wave Writer backend" ON)
-if (ALSOFT_BACKEND_WAVE)
-    set(HAVE_WAVE 1)
-    set(ALC_OBJS  ${ALC_OBJS} Alc/backends/wave.c)
-    set(BACKENDS  "${BACKENDS} WaveFile,")
-endif ()
+OPTION(ALSOFT_BACKEND_WAVE "Enable Wave Writer backend" ON)
+IF(ALSOFT_BACKEND_WAVE)
+    SET(HAVE_WAVE 1)
+    SET(ALC_OBJS  ${ALC_OBJS} Alc/backends/wave.c)
+    SET(BACKENDS  "${BACKENDS} WaveFile,")
+ENDIF()
 
 # This is always available
-set(BACKENDS  "${BACKENDS} Null")
+SET(BACKENDS  "${BACKENDS} Null")
 
 
-find_package(Git)
-if (GIT_FOUND AND EXISTS "${OpenAL_SOURCE_DIR}/.git")
-    # Get the current working branch and its latest abbreviated commit hash
-    add_custom_target(build_version
-        ${CMAKE_COMMAND} -D GIT_EXECUTABLE=${GIT_EXECUTABLE}
-                         -D LIB_VERSION=${LIB_VERSION}
-                         -D SRC=${OpenAL_SOURCE_DIR}/version.h.in
-                         -D DST=${OpenAL_BINARY_DIR}/version.h
-                         -P ${OpenAL_SOURCE_DIR}/version.cmake
-        WORKING_DIRECTORY "${OpenAL_SOURCE_DIR}"
-        VERBATIM
-    )
-else ()
-    set(GIT_BRANCH "UNKNOWN")
-    set(GIT_COMMIT_HASH "unknown")
-    configure_file(
-        "${OpenAL_SOURCE_DIR}/version.h.in"
-        "${OpenAL_BINARY_DIR}/version.h")
-endif ()
+#FIND_PACKAGE(Git)
+#IF(GIT_FOUND AND EXISTS "${OpenAL_SOURCE_DIR}/.git")
+#    # Get the current working branch and its latest abbreviated commit hash
+#    ADD_CUSTOM_TARGET(build_version
+#        ${CMAKE_COMMAND} -D GIT_EXECUTABLE=${GIT_EXECUTABLE}
+#                         -D LIB_VERSION=${LIB_VERSION}
+#                         -D SRC=${OpenAL_SOURCE_DIR}/version.h.in
+#                         -D DST=${OpenAL_BINARY_DIR}/version.h
+#                         -P ${OpenAL_SOURCE_DIR}/version.cmake
+#        WORKING_DIRECTORY "${OpenAL_SOURCE_DIR}"
+#        VERBATIM
+#    )
+#ELSE()
+#    SET(GIT_BRANCH "UNKNOWN")
+#    SET(GIT_COMMIT_HASH "unknown")
+#    CONFIGURE_FILE(
+#        "${OpenAL_SOURCE_DIR}/version.h.in"
+#        "${OpenAL_BINARY_DIR}/version.h")
+#ENDIF()
 
-set(NATIVE_SRC_DIR  "${OpenAL_SOURCE_DIR}/native-tools/")
-set(NATIVE_BIN_DIR  "${OpenAL_BINARY_DIR}/native-tools/")
-file(MAKE_DIRECTORY "${NATIVE_BIN_DIR}")
+SET(NATIVE_SRC_DIR  "${OpenAL_SOURCE_DIR}/native-tools/")
+SET(NATIVE_BIN_DIR  "${OpenAL_BINARY_DIR}/native-tools/")
+FILE(MAKE_DIRECTORY "${NATIVE_BIN_DIR}")
 
-set(BIN2H_COMMAND  "${NATIVE_BIN_DIR}bin2h")
-set(BSINCGEN_COMMAND  "${NATIVE_BIN_DIR}bsincgen")
+SET(BIN2H_COMMAND  "${NATIVE_BIN_DIR}bin2h")
+SET(BSINCGEN_COMMAND  "${NATIVE_BIN_DIR}bsincgen")
+ADD_CUSTOM_COMMAND(OUTPUT "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
+    COMMAND ${CMAKE_COMMAND} "${NATIVE_SRC_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E remove "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
+    COMMAND ${CMAKE_COMMAND} --build . --config "Release"
+    WORKING_DIRECTORY "${NATIVE_BIN_DIR}"
+    DEPENDS "${NATIVE_SRC_DIR}CMakeLists.txt"
+    IMPLICIT_DEPENDS C "${NATIVE_SRC_DIR}bin2h.c"
+                     C "${NATIVE_SRC_DIR}bsincgen.c"
+    VERBATIM
+)
+ADD_CUSTOM_TARGET(native-tools
+    DEPENDS "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
+    VERBATIM
+)
 
-message("CMAKE_SYSTEM_NAME: '${CMAKE_SYSTEM_NAME}'")
-message("CMAKE_HOST_SYSTEM_NAME: '${CMAKE_HOST_SYSTEM_NAME}'")
-message("CMAKE_CROSSCOMPILING: '${CMAKE_CROSSCOMPILING}'")
-
-set(NATIVE_TOOLS_EXE_EXTENSION "")
-if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
-    set(NATIVE_TOOLS_EXE_EXTENSION ".exe")
-endif ()
-
-add_subdirectory(native-tools)
-#try_compile(<resultVar> <bindir> <srcdir>
-#            <projectName> [<targetName>] [CMAKE_FLAGS <flags>...]
-#            [OUTPUT_VARIABLE <var>])
-#try_compile(NATIVE_TOOLS_BIN2H_COMPILED ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}
-#            native-tools "bin2h${NATIVE_TOOLS_EXE_EXTENSION}")
-#try_compile(NATIVE_TOOLS_BSINCGEN_COMPILED ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}
-#            native-tools "bsincgen${NATIVE_TOOLS_EXE_EXTENSION}")
-            
-#try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
-#        ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
-#        ARGS "${OpenAL_SOURCE_DIR}hrtf/default-44100.mhr" "${OpenAL_BINARY_DIR}/default-44100.mhr.h" "hrtf_default_44100")
-#try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
-#        ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
-#        ARGS "${OpenAL_SOURCE_DIR}hrtf/default-48000.mhr" "${OpenAL_BINARY_DIR}/default-48000.mhr.h" "hrtf_default_48000")
-set (BSINCGEN_LINK_LIBS "")
-if (HAVE_LIBM)
-    set (BSINCGEN_LINK_LIBS "m")
-endif ()
-
-set(CPP_DEFS "")
-if (WIN32)
-    set(CPP_DEFS "_WIN32")
-endif ()
-
-set(NATIVE_TOOLS_BSINCGEN_RAN "0")
-try_run(NATIVE_TOOLS_BSINCGEN_RAN
-        NATIVE_TOOLS_BSINCGEN_COMPILED
-        ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bsincgen.c
-        COMPILE_DEFINITIONS ${CPP_DEFS}
-        LINK_LIBRARIES ${BSINCGEN_LINK_LIBS}
-        ARGS "${OpenAL_BINARY_DIR}/bsinc_inc.h")
-        message("arg    : '${OpenAL_BINARY_DIR}/bsinc_inc.h'")
-if (NOT ${NATIVE_TOOLS_BSINCGEN_COMPILED})
-    message(" - bsincgen failed to compile.")
-endif ()
-if (${NATIVE_TOOLS_BSINCGEN_RAN} MATCHES "FAILED_TO_RUN")
-    message(" - bsincgen failed to run.")
-endif ()
-
-#add_custom_command(OUTPUT "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
-#    COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" "${NATIVE_SRC_DIR}"
-#    COMMAND ${CMAKE_COMMAND} -E remove "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
-#    COMMAND ${CMAKE_COMMAND} --build . --config "Release"
-#    WORKING_DIRECTORY "${NATIVE_BIN_DIR}"
-#    DEPENDS "${NATIVE_SRC_DIR}CMakeLists.txt"
-#    IMPLICIT_DEPENDS C "${NATIVE_SRC_DIR}bin2h.c"
-#                     C "${NATIVE_SRC_DIR}bsincgen.c"
-#    VERBATIM
-#)
-#add_custom_target(native-tools
-#    DEPENDS "${BIN2H_COMMAND}" "${BSINCGEN_COMMAND}"
-#    VERBATIM
-#)
-
-set(ALC_OBJS "")
 option(ALSOFT_EMBED_HRTF_DATA "Embed the HRTF data files (increases library footprint)" ON)
-if (ALSOFT_EMBED_HRTF_DATA)
+if(ALSOFT_EMBED_HRTF_DATA)
     MACRO(make_hrtf_header FILENAME VARNAME)
-        set(infile  "${OpenAL_SOURCE_DIR}/hrtf/${FILENAME}")
-        set(outfile  "${OpenAL_BINARY_DIR}/${FILENAME}.h")
+        SET(infile  "${OpenAL_SOURCE_DIR}/hrtf/${FILENAME}")
+        SET(outfile  "${OpenAL_BINARY_DIR}/${FILENAME}.h")
 
-#        add_custom_command(OUTPUT "${outfile}"
-#            COMMAND "${BIN2H_COMMAND}" "${infile}" "${outfile}" ${VARNAME}
-#            DEPENDS native-tools "${infile}"
-#            VERBATIM
-#        )
-        set(NATIVE_TOOLS_BIN2H_RAN "0")
-        try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
-                ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
-                COMPILE_DEFINITIONS ${CPP_DEFS}
-                ARGS "${infile}" "${outfile}" "${VARNAME}")
-        if (NOT ${NATIVE_TOOLS_BIN2H_COMPILED})
-            message(" - bin2h failed to compile.")
-        endif ()
-        
-        if (${NATIVE_TOOLS_BSINCGEN_RAN} MATCHES "FAILED_TO_RUN")
-            message(" - bin2h failed to run.")
-        endif ()
-
-        set(ALC_OBJS  ${ALC_OBJS} "${outfile}")
-        message("infile : '${infile}'")
-        message("outfile: '${outfile}'")
+        ADD_CUSTOM_COMMAND(OUTPUT "${outfile}"
+            COMMAND "${BIN2H_COMMAND}" "${infile}" "${outfile}" ${VARNAME}
+            DEPENDS native-tools "${infile}"
+            VERBATIM
+        )
+        SET(ALC_OBJS  ${ALC_OBJS} "${outfile}")
     ENDMACRO()
 
     make_hrtf_header(default-44100.mhr "hrtf_default_44100")
     make_hrtf_header(default-48000.mhr "hrtf_default_48000")
+endif()
 
-#    set(NATIVE_TOOLS_BIN2H_RAN "0")
-#    try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
-#            ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
-#            COMPILE_DEFINITIONS ${CPP_DEFS}
-#            ARGS "${OpenAL_SOURCE_DIR}hrtf/default-44100.mhr" "${OpenAL_BINARY_DIR}/default-44100.mhr.h" "hrtf_default_44100")
-#    if (NATIVE_TOOLS_BIN2H_COMPILED)
-#        set(ALC_OBJS  ${ALC_OBJS} "${outfile}")
-#    endif()
-#
-#    set(NATIVE_TOOLS_BIN2H_RAN "0")
-#    try_run(NATIVE_TOOLS_BIN2H_RAN NATIVE_TOOLS_BIN2H_COMPILED
-#            ${NATIVE_BIN_DIR} ${NATIVE_SRC_DIR}/bin2h.c
-#            COMPILE_DEFINITIONS ${CPP_DEFS}
-#            ARGS "${OpenAL_SOURCE_DIR}hrtf/default-48000.mhr" "${OpenAL_BINARY_DIR}/default-48000.mhr.h" "hrtf_default_48000")
-endif ()
-
-#add_custom_command(OUTPUT "${OpenAL_BINARY_DIR}/bsinc_inc.h"
-#    COMMAND "${BSINCGEN_COMMAND}" "${OpenAL_BINARY_DIR}/bsinc_inc.h"
-#    DEPENDS native-tools "${NATIVE_SRC_DIR}bsincgen.c"
-#    VERBATIM
-#)
-set(ALC_OBJS  ${ALC_OBJS} "${OpenAL_BINARY_DIR}/bsinc_inc.h")
+ADD_CUSTOM_COMMAND(OUTPUT "${OpenAL_BINARY_DIR}/bsinc_inc.h"
+    COMMAND "${BSINCGEN_COMMAND}" "${OpenAL_BINARY_DIR}/bsinc_inc.h"
+    DEPENDS native-tools "${NATIVE_SRC_DIR}bsincgen.c"
+    VERBATIM
+)
+SET(ALC_OBJS  ${ALC_OBJS} "${OpenAL_BINARY_DIR}/bsinc_inc.h")
 
 
-if (ALSOFT_UTILS AND NOT ALSOFT_NO_CONFIG_UTIL)
+IF(ALSOFT_UTILS AND NOT ALSOFT_NO_CONFIG_UTIL)
     add_subdirectory(utils/alsoft-config)
-endif ()
-if (ALSOFT_EXAMPLES)
-    if (NOT SDL2_FOUND)
-        find_package(SDL2)
-    endif ()
-    if (SDL2_FOUND)
-        find_package(SDL_sound)
-        find_package(FFmpeg COMPONENTS AVFORMAT AVCODEC AVUTIL SWSCALE SWRESAMPLE)
-    endif ()
-endif ()
+ENDIF()
+IF(ALSOFT_EXAMPLES)
+    IF(NOT SDL2_FOUND)
+        FIND_PACKAGE(SDL2)
+    ENDIF()
+    IF(SDL2_FOUND)
+        FIND_PACKAGE(SDL_sound)
+        FIND_PACKAGE(FFmpeg COMPONENTS AVFORMAT AVCODEC AVUTIL SWSCALE SWRESAMPLE)
+    ENDIF()
+ENDIF()
 
-if (WIN32)
-    set(LIBNAME "OpenAL32")
-else ()
-    set(LIBNAME "openal")
-endif ()
+IF(NOT WIN32)
+    SET(LIBNAME "openal")
+ELSE()
+    SET(LIBNAME "OpenAL32")
+ENDIF()
 
 # Needed for openal.pc.in
-set(prefix ${CMAKE_INSTALL_PREFIX})
-set(exec_prefix "\${prefix}")
-set(libdir "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
-set(bindir "\${exec_prefix}/${CMAKE_INSTALL_BINDIR}")
-set(includedir "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
-set(PACKAGE_VERSION "${LIB_VERSION}")
-set(PKG_CONFIG_CFLAGS )
-set(PKG_CONFIG_PRIVATE_LIBS )
-if (LIBTYPE STREQUAL "STATIC")
-    set(PKG_CONFIG_CFLAGS -DAL_LIBTYPE_STATIC)
-    foreach (FLAG  ${LINKER_FLAGS} ${EXTRA_LIBS} ${MATH_LIB})
+SET(prefix ${CMAKE_INSTALL_PREFIX})
+SET(exec_prefix "\${prefix}")
+SET(libdir "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
+SET(bindir "\${exec_prefix}/${CMAKE_INSTALL_BINDIR}")
+SET(includedir "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+SET(PACKAGE_VERSION "${LIB_VERSION}")
+SET(PKG_CONFIG_CFLAGS )
+SET(PKG_CONFIG_PRIVATE_LIBS )
+IF(LIBTYPE STREQUAL "STATIC")
+    SET(PKG_CONFIG_CFLAGS -DAL_LIBTYPE_STATIC)
+    FOREACH(FLAG  ${LINKER_FLAGS} ${EXTRA_LIBS} ${MATH_LIB})
         # If this is already a linker flag, or is a full path+file, add it
         # as-is. Otherwise, it's a name intended to be dressed as -lname.
-        if (FLAG MATCHES "^-.*" OR EXISTS "${FLAG}")
-            set(PKG_CONFIG_PRIVATE_LIBS "${PKG_CONFIG_PRIVATE_LIBS} ${FLAG}")
-        else ()
-            set(PKG_CONFIG_PRIVATE_LIBS "${PKG_CONFIG_PRIVATE_LIBS} -l${FLAG}")
-        endif ()
-    endforeach ()
-endif ()
+        IF(FLAG MATCHES "^-.*" OR EXISTS "${FLAG}")
+            SET(PKG_CONFIG_PRIVATE_LIBS "${PKG_CONFIG_PRIVATE_LIBS} ${FLAG}")
+        ELSE()
+            SET(PKG_CONFIG_PRIVATE_LIBS "${PKG_CONFIG_PRIVATE_LIBS} -l${FLAG}")
+        ENDIF()
+    ENDFOREACH()
+ENDIF()
 
 # End configuration
-configure_file(
+CONFIGURE_FILE(
     "${OpenAL_SOURCE_DIR}/config.h.in"
     "${OpenAL_BINARY_DIR}/config.h")
-configure_file(
+CONFIGURE_FILE(
     "${OpenAL_SOURCE_DIR}/openal.pc.in"
     "${OpenAL_BINARY_DIR}/openal.pc"
     @ONLY)
 
 
 # Add a static library with common functions used by multiple targets
-add_library(common STATIC ${COMMON_OBJS})
-target_compile_definitions(common PRIVATE ${CPP_DEFS})
-target_compile_options(common PRIVATE ${C_FLAGS})
+ADD_LIBRARY(common STATIC ${COMMON_OBJS})
+TARGET_COMPILE_DEFINITIONS(common PRIVATE ${CPP_DEFS})
+TARGET_COMPILE_OPTIONS(common PRIVATE ${C_FLAGS})
 
 
-unset(HAS_ROUTER)
-set(IMPL_TARGET OpenAL)
-set(COMMON_LIB )
-set(SUBSYS_FLAG )
+UNSET(HAS_ROUTER)
+SET(IMPL_TARGET OpenAL)
+SET(COMMON_LIB )
+SET(SUBSYS_FLAG )
 
 # Build main library
-if (LIBTYPE STREQUAL "STATIC")
-    set(CPP_DEFS ${CPP_DEFS} AL_LIBTYPE_STATIC)
-    if (WIN32 AND ALSOFT_NO_UID_DEFS)
-        set(CPP_DEFS ${CPP_DEFS} AL_NO_UID_DEFS)
-    endif ()
-    add_library(OpenAL STATIC ${COMMON_OBJS} ${OPENAL_OBJS} ${ALC_OBJS})
-else ()
+IF(LIBTYPE STREQUAL "STATIC")
+    SET(CPP_DEFS ${CPP_DEFS} AL_LIBTYPE_STATIC)
+    IF(WIN32 AND ALSOFT_NO_UID_DEFS)
+        SET(CPP_DEFS ${CPP_DEFS} AL_NO_UID_DEFS)
+    ENDIF()
+    ADD_LIBRARY(OpenAL STATIC ${COMMON_OBJS} ${OPENAL_OBJS} ${ALC_OBJS})
+ELSE()
     # Make sure to compile the common code with PIC, since it'll be linked into
     # shared libs that needs it.
-    set_property(TARGET common PROPERTY POSITION_INDEPENDENT_CODE TRUE)
-    set(COMMON_LIB common)
+    SET_PROPERTY(TARGET common PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+    SET(COMMON_LIB common)
 
-    if (WIN32)
-        if (MSVC)
-            set(SUBSYS_FLAG ${SUBSYS_FLAG} "/SUBSYSTEM:WINDOWS")
+    IF(WIN32)
+        IF(MSVC)
+            SET(SUBSYS_FLAG ${SUBSYS_FLAG} "/SUBSYSTEM:WINDOWS")
         ELSEIF(CMAKE_COMPILER_IS_GNUCC)
-            set(SUBSYS_FLAG ${SUBSYS_FLAG} "-mwindows")
-        endif ()
-    endif ()
+            SET(SUBSYS_FLAG ${SUBSYS_FLAG} "-mwindows")
+        ENDIF()
+    ENDIF()
 
-    if (WIN32 AND ALSOFT_BUILD_ROUTER)
-        add_library(OpenAL SHARED router/router.c router/router.h router/alc.c router/al.c)
-        target_compile_definitions(OpenAL
+    IF(WIN32 AND ALSOFT_BUILD_ROUTER)
+        ADD_LIBRARY(OpenAL SHARED router/router.c router/router.h router/alc.c router/al.c)
+        TARGET_COMPILE_DEFINITIONS(OpenAL
             PRIVATE AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES ${CPP_DEFS})
-        target_compile_options(OpenAL PRIVATE ${C_FLAGS})
-        target_link_libraries(OpenAL PRIVATE ${LINKER_FLAGS} ${COMMON_LIB})
-        set_target_properties(OpenAL PROPERTIES PREFIX "")
-        set_target_properties(OpenAL PROPERTIES OUTPUT_NAME ${LIBNAME})
-        if (TARGET build_version)
-            add_dependencies(OpenAL build_version)
-        endif ()
-        set(HAS_ROUTER 1)
+        TARGET_COMPILE_OPTIONS(OpenAL PRIVATE ${C_FLAGS})
+        TARGET_LINK_LIBRARIES(OpenAL PRIVATE ${LINKER_FLAGS} ${COMMON_LIB})
+        SET_TARGET_PROPERTIES(OpenAL PROPERTIES PREFIX "")
+        SET_TARGET_PROPERTIES(OpenAL PROPERTIES OUTPUT_NAME ${LIBNAME})
+        IF(TARGET build_version)
+            ADD_DEPENDENCIES(OpenAL build_version)
+        ENDIF()
+        SET(HAS_ROUTER 1)
 
-        set(LIBNAME "soft_oal")
-        set(IMPL_TARGET soft_oal)
-    endif ()
+        SET(LIBNAME "soft_oal")
+        SET(IMPL_TARGET soft_oal)
+    ENDIF()
 
-    add_library(${IMPL_TARGET} SHARED ${OPENAL_OBJS} ${ALC_OBJS})
-    if (WIN32)
-        set_target_properties(${IMPL_TARGET} PROPERTIES PREFIX "")
-    endif ()
-endif ()
-
-set_target_properties(${IMPL_TARGET} PROPERTIES OUTPUT_NAME ${LIBNAME}
+    ADD_LIBRARY(${IMPL_TARGET} SHARED ${OPENAL_OBJS} ${ALC_OBJS})
+    IF(WIN32)
+        SET_TARGET_PROPERTIES(${IMPL_TARGET} PROPERTIES PREFIX "")
+    ENDIF()
+ENDIF()
+SET_TARGET_PROPERTIES(${IMPL_TARGET} PROPERTIES OUTPUT_NAME ${LIBNAME}
     VERSION ${LIB_VERSION}
     SOVERSION ${LIB_MAJOR_VERSION}
 )
+TARGET_COMPILE_DEFINITIONS(${IMPL_TARGET}
+    PRIVATE AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES ${CPP_DEFS})
+TARGET_INCLUDE_DIRECTORIES(${IMPL_TARGET}
+    PRIVATE "${OpenAL_SOURCE_DIR}/OpenAL32/Include" "${OpenAL_SOURCE_DIR}/Alc" ${INC_PATHS})
+TARGET_COMPILE_OPTIONS(${IMPL_TARGET} PRIVATE ${C_FLAGS})
+TARGET_LINK_LIBRARIES(${IMPL_TARGET}
+    PRIVATE ${LINKER_FLAGS} ${COMMON_LIB} ${EXTRA_LIBS} ${MATH_LIB})
+IF(TARGET build_version)
+    ADD_DEPENDENCIES(${IMPL_TARGET} build_version)
+ENDIF()
 
-target_compile_definitions(${IMPL_TARGET} PRIVATE AL_BUILD_LIBRARY AL_ALEXT_PROTOTYPES ${CPP_DEFS})
-target_include_directories(${IMPL_TARGET} PRIVATE "${OpenAL_SOURCE_DIR}/OpenAL32/Include" "${OpenAL_SOURCE_DIR}/Alc" ${INC_PATHS})
-target_compile_options(${IMPL_TARGET} PRIVATE ${C_FLAGS})
-target_link_libraries(${IMPL_TARGET} PRIVATE ${LINKER_FLAGS} ${COMMON_LIB} ${EXTRA_LIBS} ${MATH_LIB})
-
-if (TARGET build_version)
-    add_dependencies(${IMPL_TARGET} build_version)
-endif ()
-
-if (WIN32 AND MINGW AND ALSOFT_BUILD_IMPORT_LIB AND NOT LIBTYPE STREQUAL "STATIC")
-    find_program(SED_EXECUTABLE NAMES sed DOC "sed executable")
-    find_program(DLLTOOL_EXECUTABLE NAMES "${DLLTOOL}" DOC "dlltool executable")
-    if (NOT SED_EXECUTABLE OR NOT DLLTOOL_EXECUTABLE)
-        message(STATUS "")
-        if (NOT SED_EXECUTABLE)
-            message(STATUS "WARNING: Cannot find sed, disabling .def/.lib generation")
-        endif ()
-        if (NOT DLLTOOL_EXECUTABLE)
-            message(STATUS "WARNING: Cannot find dlltool, disabling .def/.lib generation")
-        endif ()
-    else ()
-        set_property(TARGET OpenAL APPEND_STRING PROPERTY LINK_FLAGS
+IF(WIN32 AND MINGW AND ALSOFT_BUILD_IMPORT_LIB AND NOT LIBTYPE STREQUAL "STATIC")
+    FIND_PROGRAM(SED_EXECUTABLE NAMES sed DOC "sed executable")
+    FIND_PROGRAM(DLLTOOL_EXECUTABLE NAMES "${DLLTOOL}" DOC "dlltool executable")
+    IF(NOT SED_EXECUTABLE OR NOT DLLTOOL_EXECUTABLE)
+        MESSAGE(STATUS "")
+        IF(NOT SED_EXECUTABLE)
+            MESSAGE(STATUS "WARNING: Cannot find sed, disabling .def/.lib generation")
+        ENDIF()
+        IF(NOT DLLTOOL_EXECUTABLE)
+            MESSAGE(STATUS "WARNING: Cannot find dlltool, disabling .def/.lib generation")
+        ENDIF()
+    ELSE()
+        SET_PROPERTY(TARGET OpenAL APPEND_STRING PROPERTY LINK_FLAGS
                         " -Wl,--output-def,OpenAL32.def")
-        add_custom_command(TARGET OpenAL POST_BUILD
+        ADD_CUSTOM_COMMAND(TARGET OpenAL POST_BUILD
             COMMAND "${SED_EXECUTABLE}" -i -e "s/ @[^ ]*//" OpenAL32.def
             COMMAND "${DLLTOOL_EXECUTABLE}" -d OpenAL32.def -l OpenAL32.lib -D OpenAL32.dll
             COMMENT "Stripping ordinals from OpenAL32.def and generating OpenAL32.lib..."
             VERBATIM
         )
-    endif ()
-endif ()
+    ENDIF()
+ENDIF()
 
-if (ALSOFT_INSTALL)
-    install(TARGETS OpenAL
-            EXPORT OpenAL-targets
+IF(ALSOFT_INSTALL)
+    INSTALL(TARGETS OpenAL EXPORT OpenAL
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/OpenAL" "${CMAKE_INSTALL_INCLUDEDIR}/OpenAL/AL"
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} ${CMAKE_INSTALL_INCLUDEDIR}/AL
     )
-    
     EXPORT(TARGETS OpenAL
            NAMESPACE OpenAL::
            FILE OpenALConfig.cmake)
-           
-    install(EXPORT OpenAL-targets
+    INSTALL(EXPORT OpenAL
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL
             NAMESPACE OpenAL::
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL")
-            
-    install(FILES include/AL/al.h
+            FILE OpenALConfig.cmake)
+    INSTALL(FILES include/AL/al.h
                   include/AL/alc.h
                   include/AL/alext.h
                   include/AL/efx.h
                   include/AL/efx-creative.h
                   include/AL/efx-presets.h
-            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/OpenAL/AL"
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/AL
     )
-    
-    install(FILES "${OpenAL_BINARY_DIR}/openal.pc"
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL")
-            
-    if (TARGET soft_oal)
-        install(TARGETS soft_oal
+    INSTALL(FILES "${OpenAL_BINARY_DIR}/openal.pc"
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+    IF(TARGET soft_oal)
+        INSTALL(TARGETS soft_oal
                 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         )
-    endif ()
-endif ()
+    ENDIF()
+ENDIF()
 
 
-if (HAS_ROUTER)
+if(HAS_ROUTER)
     message(STATUS "")
     message(STATUS "Building DLL router")
-endif ()
+endif()
 
-message(STATUS "")
-message(STATUS "Building OpenAL with support for the following backends:")
-message(STATUS "    ${BACKENDS}")
-message(STATUS "")
-message(STATUS "Building with support for CPU extensions:")
-message(STATUS "    ${CPU_EXTS}")
-message(STATUS "")
-if (FPMATH_SET)
-    message(STATUS "Building with SSE${FPMATH_SET} codegen")
-    message(STATUS "")
-endif ()
+MESSAGE(STATUS "")
+MESSAGE(STATUS "Building OpenAL with support for the following backends:")
+MESSAGE(STATUS "    ${BACKENDS}")
+MESSAGE(STATUS "")
+MESSAGE(STATUS "Building with support for CPU extensions:")
+MESSAGE(STATUS "    ${CPU_EXTS}")
+MESSAGE(STATUS "")
+IF(FPMATH_SET)
+    MESSAGE(STATUS "Building with SSE${FPMATH_SET} codegen")
+    MESSAGE(STATUS "")
+ENDIF()
 
-if (WIN32)
-    if (NOT HAVE_DSOUND)
-        message(STATUS "WARNING: Building the Windows version without DirectSound output")
-        message(STATUS "         This is probably NOT what you want!")
-        message(STATUS "")
-    endif ()
-endif ()
+IF(WIN32)
+    IF(NOT HAVE_DSOUND)
+        MESSAGE(STATUS "WARNING: Building the Windows version without DirectSound output")
+        MESSAGE(STATUS "         This is probably NOT what you want!")
+        MESSAGE(STATUS "")
+    ENDIF()
+ENDIF()
 
-if (ALSOFT_EMBED_HRTF_DATA)
+if(ALSOFT_EMBED_HRTF_DATA)
     message(STATUS "Embedding HRTF datasets")
     message(STATUS "")
-endif ()
+endif()
 
 # Install alsoft.conf configuration file
-if (ALSOFT_CONFIG)
-    install(FILES alsoftrc.sample
-            DESTINATION ${CMAKE_INSTALL_DATADIR}/OpenAL
+IF(ALSOFT_CONFIG)
+    INSTALL(FILES alsoftrc.sample
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/openal
     )
-    message(STATUS "Installing sample configuration")
-    message(STATUS "")
-endif ()
+    MESSAGE(STATUS "Installing sample configuration")
+    MESSAGE(STATUS "")
+ENDIF()
 
 # Install HRTF definitions
-if (ALSOFT_HRTF_DEFS)
-    install(FILES hrtf/default-44100.mhr
+IF(ALSOFT_HRTF_DEFS)
+    INSTALL(FILES hrtf/default-44100.mhr
                   hrtf/default-48000.mhr
-            DESTINATION ${CMAKE_INSTALL_DATADIR}/OpenAL/hrtf
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/openal/hrtf
     )
-    message(STATUS "Installing HRTF definitions")
-    message(STATUS "")
-endif ()
+    MESSAGE(STATUS "Installing HRTF definitions")
+    MESSAGE(STATUS "")
+ENDIF()
 
 # Install AmbDec presets
-if (ALSOFT_AMBDEC_PRESETS)
-    install(FILES presets/3D7.1.ambdec
+IF(ALSOFT_AMBDEC_PRESETS)
+    INSTALL(FILES presets/3D7.1.ambdec
                   presets/hexagon.ambdec
                   presets/itu5.1.ambdec
                   presets/itu5.1-nocenter.ambdec
                   presets/rectangle.ambdec
                   presets/square.ambdec
                   presets/presets.txt
-            DESTINATION ${CMAKE_INSTALL_DATADIR}/OpenAL/presets
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/openal/presets
     )
-    message(STATUS "Installing AmbDec presets")
-    message(STATUS "")
-endif ()
+    MESSAGE(STATUS "Installing AmbDec presets")
+    MESSAGE(STATUS "")
+ENDIF()
 
-if (ALSOFT_UTILS)
-    add_executable(openal-info utils/openal-info.c)
-    target_compile_options(openal-info PRIVATE ${C_FLAGS})
-    target_link_libraries(openal-info PRIVATE ${LINKER_FLAGS} OpenAL)
+IF(ALSOFT_UTILS)
+    ADD_EXECUTABLE(openal-info utils/openal-info.c)
+    TARGET_COMPILE_OPTIONS(openal-info PRIVATE ${C_FLAGS})
+    TARGET_LINK_LIBRARIES(openal-info PRIVATE ${LINKER_FLAGS} OpenAL)
 
-    set(MAKEHRTF_SRCS  utils/makehrtf.c)
-    if (NOT HAVE_GETOPT)
-        set(MAKEHRTF_SRCS  ${MAKEHRTF_SRCS} utils/getopt.c utils/getopt.h)
-    endif ()
-    add_executable(makehrtf ${MAKEHRTF_SRCS})
-    target_compile_definitions(makehrtf PRIVATE ${CPP_DEFS})
-    target_compile_options(makehrtf PRIVATE ${C_FLAGS})
-    if (HAVE_LIBM)
-        target_link_libraries(makehrtf PRIVATE ${LINKER_FLAGS} m)
-    endif ()
+    SET(MAKEHRTF_SRCS  utils/makehrtf.c)
+    IF(NOT HAVE_GETOPT)
+        SET(MAKEHRTF_SRCS  ${MAKEHRTF_SRCS} utils/getopt.c utils/getopt.h)
+    ENDIF()
+    ADD_EXECUTABLE(makehrtf ${MAKEHRTF_SRCS})
+    TARGET_COMPILE_DEFINITIONS(makehrtf PRIVATE ${CPP_DEFS})
+    TARGET_COMPILE_OPTIONS(makehrtf PRIVATE ${C_FLAGS})
+    IF(HAVE_LIBM)
+        TARGET_LINK_LIBRARIES(makehrtf PRIVATE ${LINKER_FLAGS} m)
+    ENDIF()
 
-    if (ALSOFT_INSTALL)
-        install(TARGETS openal-info makehrtf
+    IF(ALSOFT_INSTALL)
+        INSTALL(TARGETS openal-info makehrtf
                 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )
-    endif ()
+    ENDIF()
 
-    message(STATUS "Building utility programs")
-    if (TARGET alsoft-config)
-        message(STATUS "Building configuration program")
-    endif ()
-    message(STATUS "")
-endif ()
+    MESSAGE(STATUS "Building utility programs")
+    IF(TARGET alsoft-config)
+        MESSAGE(STATUS "Building configuration program")
+    ENDIF()
+    MESSAGE(STATUS "")
+ENDIF()
 
-if (ALSOFT_TESTS)
-    set(TEST_COMMON_OBJS  examples/common/alhelpers.c)
+IF(ALSOFT_TESTS)
+    SET(TEST_COMMON_OBJS  examples/common/alhelpers.c)
 
-    add_executable(altonegen examples/altonegen.c ${TEST_COMMON_OBJS})
-    target_compile_definitions(altonegen PRIVATE ${CPP_DEFS})
-    target_compile_options(altonegen PRIVATE ${C_FLAGS})
-    target_link_libraries(altonegen PRIVATE ${LINKER_FLAGS} common OpenAL ${MATH_LIB})
+    ADD_EXECUTABLE(altonegen examples/altonegen.c ${TEST_COMMON_OBJS})
+    TARGET_COMPILE_DEFINITIONS(altonegen PRIVATE ${CPP_DEFS})
+    TARGET_COMPILE_OPTIONS(altonegen PRIVATE ${C_FLAGS})
+    TARGET_LINK_LIBRARIES(altonegen PRIVATE ${LINKER_FLAGS} common OpenAL ${MATH_LIB})
 
-    if (ALSOFT_INSTALL)
-        install(TARGETS altonegen
+    IF(ALSOFT_INSTALL)
+        INSTALL(TARGETS altonegen
                 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )
-    endif ()
+    ENDIF()
 
-    message(STATUS "Building test programs")
-    message(STATUS "")
-endif ()
+    MESSAGE(STATUS "Building test programs")
+    MESSAGE(STATUS "")
+ENDIF()
 
-if (ALSOFT_EXAMPLES)
-    add_executable(alrecord examples/alrecord.c)
-    target_compile_definitions(alrecord PRIVATE ${CPP_DEFS})
-    target_compile_options(alrecord PRIVATE ${C_FLAGS})
-    target_link_libraries(alrecord PRIVATE ${LINKER_FLAGS} common OpenAL)
+IF(ALSOFT_EXAMPLES)
+    ADD_EXECUTABLE(alrecord examples/alrecord.c)
+    TARGET_COMPILE_DEFINITIONS(alrecord PRIVATE ${CPP_DEFS})
+    TARGET_COMPILE_OPTIONS(alrecord PRIVATE ${C_FLAGS})
+    TARGET_LINK_LIBRARIES(alrecord PRIVATE ${LINKER_FLAGS} common OpenAL)
 
-    if (ALSOFT_INSTALL)
-        install(TARGETS alrecord
+    IF(ALSOFT_INSTALL)
+        INSTALL(TARGETS alrecord
                 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )
-    endif ()
+    ENDIF()
 
-    message(STATUS "Building example programs")
+    MESSAGE(STATUS "Building example programs")
 
-    if (SDL2_FOUND)
-        if (SDL_SOUND_FOUND)
+    IF(SDL2_FOUND)
+        IF(SDL_SOUND_FOUND)
             # Add a static library with common functions used by multiple targets
-            add_library(ex-common STATIC examples/common/alhelpers.c)
-            target_compile_definitions(ex-common PRIVATE ${CPP_DEFS})
-            target_compile_options(ex-common PRIVATE ${C_FLAGS})
+            ADD_LIBRARY(ex-common STATIC examples/common/alhelpers.c)
+            TARGET_COMPILE_DEFINITIONS(ex-common PRIVATE ${CPP_DEFS})
+            TARGET_COMPILE_OPTIONS(ex-common PRIVATE ${C_FLAGS})
 
-            add_executable(alplay examples/alplay.c)
-            target_compile_definitions(alplay PRIVATE ${CPP_DEFS})
-            target_include_directories(alplay
+            ADD_EXECUTABLE(alplay examples/alplay.c)
+            TARGET_COMPILE_DEFINITIONS(alplay PRIVATE ${CPP_DEFS})
+            TARGET_INCLUDE_DIRECTORIES(alplay
                 PRIVATE ${SDL2_INCLUDE_DIR} ${SDL_SOUND_INCLUDE_DIR})
-            target_compile_options(alplay PRIVATE ${C_FLAGS})
-            target_link_libraries(alplay
+            TARGET_COMPILE_OPTIONS(alplay PRIVATE ${C_FLAGS})
+            TARGET_LINK_LIBRARIES(alplay
                 PRIVATE ${LINKER_FLAGS} ${SDL_SOUND_LIBRARIES} ${SDL2_LIBRARY} ex-common common
                         OpenAL)
 
-            add_executable(alstream examples/alstream.c)
-            target_compile_definitions(alstream PRIVATE ${CPP_DEFS})
-            target_include_directories(alstream
+            ADD_EXECUTABLE(alstream examples/alstream.c)
+            TARGET_COMPILE_DEFINITIONS(alstream PRIVATE ${CPP_DEFS})
+            TARGET_INCLUDE_DIRECTORIES(alstream
                 PRIVATE ${SDL2_INCLUDE_DIR} ${SDL_SOUND_INCLUDE_DIR})
-            target_compile_options(alstream PRIVATE ${C_FLAGS})
-            target_link_libraries(alstream
+            TARGET_COMPILE_OPTIONS(alstream PRIVATE ${C_FLAGS})
+            TARGET_LINK_LIBRARIES(alstream
                 PRIVATE ${LINKER_FLAGS} ${SDL_SOUND_LIBRARIES} ${SDL2_LIBRARY} ex-common common
                         OpenAL)
 
-            add_executable(alreverb examples/alreverb.c)
-            target_compile_definitions(alreverb PRIVATE ${CPP_DEFS})
-            target_include_directories(alreverb
+            ADD_EXECUTABLE(alreverb examples/alreverb.c)
+            TARGET_COMPILE_DEFINITIONS(alreverb PRIVATE ${CPP_DEFS})
+            TARGET_INCLUDE_DIRECTORIES(alreverb
                 PRIVATE ${SDL2_INCLUDE_DIR} ${SDL_SOUND_INCLUDE_DIR})
-            target_compile_options(alreverb PRIVATE ${C_FLAGS})
-            target_link_libraries(alreverb
+            TARGET_COMPILE_OPTIONS(alreverb PRIVATE ${C_FLAGS})
+            TARGET_LINK_LIBRARIES(alreverb
                 PRIVATE ${LINKER_FLAGS} ${SDL_SOUND_LIBRARIES} ${SDL2_LIBRARY} ex-common common
                         OpenAL)
 
-            add_executable(almultireverb examples/almultireverb.c)
-            target_compile_definitions(almultireverb PRIVATE ${CPP_DEFS})
-            target_include_directories(almultireverb
+            ADD_EXECUTABLE(almultireverb examples/almultireverb.c)
+            TARGET_COMPILE_DEFINITIONS(almultireverb PRIVATE ${CPP_DEFS})
+            TARGET_INCLUDE_DIRECTORIES(almultireverb
                 PRIVATE ${SDL2_INCLUDE_DIR} ${SDL_SOUND_INCLUDE_DIR})
-            target_compile_options(almultireverb PRIVATE ${C_FLAGS})
-            target_link_libraries(almultireverb
+            TARGET_COMPILE_OPTIONS(almultireverb PRIVATE ${C_FLAGS})
+            TARGET_LINK_LIBRARIES(almultireverb
                 PRIVATE ${LINKER_FLAGS} ${SDL_SOUND_LIBRARIES} ${SDL2_LIBRARY} ex-common common
                         OpenAL ${MATH_LIB})
 
-            add_executable(allatency examples/allatency.c)
-            target_compile_definitions(allatency PRIVATE ${CPP_DEFS})
-            target_include_directories(allatency
+            ADD_EXECUTABLE(allatency examples/allatency.c)
+            TARGET_COMPILE_DEFINITIONS(allatency PRIVATE ${CPP_DEFS})
+            TARGET_INCLUDE_DIRECTORIES(allatency
                 PRIVATE ${SDL2_INCLUDE_DIR} ${SDL_SOUND_INCLUDE_DIR})
-            target_compile_options(allatency PRIVATE ${C_FLAGS})
-            target_link_libraries(allatency
+            TARGET_COMPILE_OPTIONS(allatency PRIVATE ${C_FLAGS})
+            TARGET_LINK_LIBRARIES(allatency
                 PRIVATE ${LINKER_FLAGS} ${SDL_SOUND_LIBRARIES} ${SDL2_LIBRARY} ex-common common
                         OpenAL)
 
-            add_executable(alloopback examples/alloopback.c)
-            target_compile_definitions(alloopback PRIVATE ${CPP_DEFS})
-            target_include_directories(alloopback
+            ADD_EXECUTABLE(alloopback examples/alloopback.c)
+            TARGET_COMPILE_DEFINITIONS(alloopback PRIVATE ${CPP_DEFS})
+            TARGET_INCLUDE_DIRECTORIES(alloopback
                 PRIVATE ${SDL2_INCLUDE_DIR} ${SDL_SOUND_INCLUDE_DIR})
-            target_compile_options(alloopback PRIVATE ${C_FLAGS})
-            target_link_libraries(alloopback
+            TARGET_COMPILE_OPTIONS(alloopback PRIVATE ${C_FLAGS})
+            TARGET_LINK_LIBRARIES(alloopback
                 PRIVATE ${LINKER_FLAGS} ${SDL_SOUND_LIBRARIES} ${SDL2_LIBRARY} ex-common common
                         OpenAL ${MATH_LIB})
 
-            add_executable(alhrtf examples/alhrtf.c)
-            target_compile_definitions(alhrtf PRIVATE ${CPP_DEFS})
-            target_include_directories(alhrtf
+            ADD_EXECUTABLE(alhrtf examples/alhrtf.c)
+            TARGET_COMPILE_DEFINITIONS(alhrtf PRIVATE ${CPP_DEFS})
+            TARGET_INCLUDE_DIRECTORIES(alhrtf
                 PRIVATE ${SDL2_INCLUDE_DIR} ${SDL_SOUND_INCLUDE_DIR})
-            target_compile_options(alhrtf PRIVATE ${C_FLAGS})
-            target_link_libraries(alhrtf
+            TARGET_COMPILE_OPTIONS(alhrtf PRIVATE ${C_FLAGS})
+            TARGET_LINK_LIBRARIES(alhrtf
                 PRIVATE ${LINKER_FLAGS} ${SDL_SOUND_LIBRARIES} ${SDL2_LIBRARY} ex-common common
                         OpenAL ${MATH_LIB})
 
-            if (ALSOFT_INSTALL)
-                install(TARGETS alplay alstream alreverb almultireverb allatency alloopback alhrtf
+            IF(ALSOFT_INSTALL)
+                INSTALL(TARGETS alplay alstream alreverb almultireverb allatency alloopback alhrtf
                         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 )
-            endif ()
+            ENDIF()
 
-            message(STATUS "Building SDL_sound example programs")
-        endif ()
+            MESSAGE(STATUS "Building SDL_sound example programs")
+        ENDIF()
 
-        set(FFVER_OK FALSE)
-        if (FFMPEG_FOUND)
-            set(FFVER_OK TRUE)
-            if (AVFORMAT_VERSION VERSION_LESS "57.56.101")
-                message(STATUS "libavformat is too old! (${AVFORMAT_VERSION}, wanted 57.56.101)")
-                set(FFVER_OK FALSE)
-            endif ()
-            if (AVCODEC_VERSION VERSION_LESS "57.64.101")
-                message(STATUS "libavcodec is too old! (${AVCODEC_VERSION}, wanted 57.64.101)")
-                set(FFVER_OK FALSE)
-            endif ()
-            if (AVUTIL_VERSION VERSION_LESS "55.34.101")
-                message(STATUS "libavutil is too old! (${AVUTIL_VERSION}, wanted 55.34.101)")
-                set(FFVER_OK FALSE)
-            endif ()
-            if (SWSCALE_VERSION VERSION_LESS "4.2.100")
-                message(STATUS "libswscale is too old! (${SWSCALE_VERSION}, wanted 4.2.100)")
-                set(FFVER_OK FALSE)
-            endif ()
-            if (SWRESAMPLE_VERSION VERSION_LESS "2.3.100")
-                message(STATUS "libswresample is too old! (${SWRESAMPLE_VERSION}, wanted 2.3.100)")
-                set(FFVER_OK FALSE)
-            endif ()
-        endif ()
-        if (FFVER_OK)
-            add_executable(alffplay examples/alffplay.cpp)
-            target_compile_definitions(alffplay PRIVATE ${CPP_DEFS})
-            target_include_directories(alffplay
+        SET(FFVER_OK FALSE)
+        IF(FFMPEG_FOUND)
+            SET(FFVER_OK TRUE)
+            IF(AVFORMAT_VERSION VERSION_LESS "57.56.101")
+                MESSAGE(STATUS "libavformat is too old! (${AVFORMAT_VERSION}, wanted 57.56.101)")
+                SET(FFVER_OK FALSE)
+            ENDIF()
+            IF(AVCODEC_VERSION VERSION_LESS "57.64.101")
+                MESSAGE(STATUS "libavcodec is too old! (${AVCODEC_VERSION}, wanted 57.64.101)")
+                SET(FFVER_OK FALSE)
+            ENDIF()
+            IF(AVUTIL_VERSION VERSION_LESS "55.34.101")
+                MESSAGE(STATUS "libavutil is too old! (${AVUTIL_VERSION}, wanted 55.34.101)")
+                SET(FFVER_OK FALSE)
+            ENDIF()
+            IF(SWSCALE_VERSION VERSION_LESS "4.2.100")
+                MESSAGE(STATUS "libswscale is too old! (${SWSCALE_VERSION}, wanted 4.2.100)")
+                SET(FFVER_OK FALSE)
+            ENDIF()
+            IF(SWRESAMPLE_VERSION VERSION_LESS "2.3.100")
+                MESSAGE(STATUS "libswresample is too old! (${SWRESAMPLE_VERSION}, wanted 2.3.100)")
+                SET(FFVER_OK FALSE)
+            ENDIF()
+        ENDIF()
+        IF(FFVER_OK)
+            ADD_EXECUTABLE(alffplay examples/alffplay.cpp)
+            TARGET_COMPILE_DEFINITIONS(alffplay PRIVATE ${CPP_DEFS})
+            TARGET_INCLUDE_DIRECTORIES(alffplay
                 PRIVATE ${SDL2_INCLUDE_DIR} ${FFMPEG_INCLUDE_DIRS})
-            target_compile_options(alffplay PRIVATE ${C_FLAGS})
-            target_link_libraries(alffplay
+            TARGET_COMPILE_OPTIONS(alffplay PRIVATE ${C_FLAGS})
+            TARGET_LINK_LIBRARIES(alffplay
                 PRIVATE ${LINKER_FLAGS} ${SDL2_LIBRARY} ${FFMPEG_LIBRARIES} ex-common common
                         OpenAL)
 
-            if (ALSOFT_INSTALL)
-                install(TARGETS alffplay
+            IF(ALSOFT_INSTALL)
+                INSTALL(TARGETS alffplay
                         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
                         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
                 )
-            endif ()
-            message(STATUS "Building SDL+FFmpeg example programs")
-        endif ()
-        message(STATUS "")
-    endif ()
-endif ()
+            ENDIF()
+            MESSAGE(STATUS "Building SDL+FFmpeg example programs")
+        ENDIF()
+        MESSAGE(STATUS "")
+    ENDIF()
+ENDIF()
