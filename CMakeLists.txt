@@ -1472,37 +1472,41 @@ IF(WIN32 AND MINGW AND ALSOFT_BUILD_IMPORT_LIB AND NOT LIBTYPE STREQUAL "STATIC"
     ENDIF()
 ENDIF()
 
-IF(ALSOFT_INSTALL)
-    INSTALL(TARGETS OpenAL EXPORT OpenAL
+if (ALSOFT_INSTALL)
+    install(TARGETS OpenAL
+            EXPORT OpenAL-targets
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} ${CMAKE_INSTALL_INCLUDEDIR}/AL
+            INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/OpenAL" "${CMAKE_INSTALL_INCLUDEDIR}/OpenAL/AL"
     )
+    
     EXPORT(TARGETS OpenAL
            NAMESPACE OpenAL::
            FILE OpenALConfig.cmake)
-    INSTALL(EXPORT OpenAL
-            DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL
+           
+    install(EXPORT OpenAL-targets
             NAMESPACE OpenAL::
-            FILE OpenALConfig.cmake)
-    INSTALL(FILES include/AL/al.h
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL")
+            
+    install(FILES include/AL/al.h
                   include/AL/alc.h
                   include/AL/alext.h
                   include/AL/efx.h
                   include/AL/efx-creative.h
                   include/AL/efx-presets.h
-            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/AL
+            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/OpenAL/AL"
     )
-    INSTALL(FILES "${OpenAL_BINARY_DIR}/openal.pc"
-            DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
-    IF(TARGET soft_oal)
-        INSTALL(TARGETS soft_oal
+    
+    install(FILES "${OpenAL_BINARY_DIR}/openal.pc"
+            DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL")
+            
+    if (TARGET soft_oal)
+        install(TARGETS soft_oal
                 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         )
-    ENDIF()
-ENDIF()
-
+    endif ()
+endif ()
 
 if(HAS_ROUTER)
     message(STATUS "")
