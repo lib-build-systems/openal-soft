@@ -947,8 +947,7 @@ ENDIF()
 OPTION(ALSOFT_REQUIRE_NEON "Require ARM Neon support" OFF)
 CHECK_INCLUDE_FILE(arm_neon.h HAVE_ARM_NEON_H ${FPU_NEON_SWITCH})
 
-# Only enable NEON support if compiling for Android AND the target ABI is ARM based.
-IF(HAVE_ARM_NEON_H AND ${ANDROID_ABI} MATCHES "arm")
+IF(HAVE_ARM_NEON_H)
     OPTION(ALSOFT_CPUEXT_NEON "Enable ARM Neon support" ON)
     IF(ALSOFT_CPUEXT_NEON)
         SET(HAVE_NEON 1)
