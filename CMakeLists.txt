@@ -1299,12 +1299,10 @@ IF(ALSOFT_INSTALL)
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/OpenAL ${CMAKE_INSTALL_INCLUDEDIR}/OpenAL/AL)
     EXPORT(TARGETS OpenAL
-        NAMESPACE OpenAL::
-        FILE OpenALConfig.cmake)
+        NAMESPACE OpenAL::)
     INSTALL(EXPORT OpenAL-targets
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL
-        NAMESPACE OpenAL::
-        FILE OpenALConfig.cmake)
+        NAMESPACE OpenAL::)
     INSTALL(FILES
         include/AL/al.h
         include/AL/alc.h
