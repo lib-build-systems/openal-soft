@@ -1379,7 +1379,7 @@ if(ALSOFT_INSTALL)
     export(TARGETS OpenAL
         NAMESPACE OpenAL::
         FILE OpenALConfig.cmake)
-    install(EXPORT OpenAL
+    install(EXPORT OpenAL-targets
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL
         NAMESPACE OpenAL::
         FILE OpenALConfig.cmake)
