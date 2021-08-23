@@ -1383,7 +1383,7 @@ if(ALSOFT_INSTALL)
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL
         NAMESPACE OpenAL::)
     install(DIRECTORY include/AL
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/OpenAL/AL)
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
     install(FILES "${OpenAL_BINARY_DIR}/openal.pc"
         DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL")
     if(TARGET soft_oal)
