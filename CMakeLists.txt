@@ -1487,10 +1487,9 @@ if(ALSOFT_INSTALL)
     export(TARGETS OpenAL
         NAMESPACE OpenAL::
         FILE OpenAL-targets.cmake)
-    install(EXPORT OpenAL
+    install(EXPORT OpenAL-targets
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL
-        NAMESPACE OpenAL::
-        FILE OpenAL-targets.cmake)
+        NAMESPACE OpenAL::)
     install(DIRECTORY include/AL
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
     install(FILES "${OpenAL_BINARY_DIR}/openal.pc"
