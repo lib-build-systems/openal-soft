@@ -1494,7 +1494,7 @@ if(ALSOFT_INSTALL)
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
     install(FILES "${OpenAL_BINARY_DIR}/openal.pc"
         DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
-    install(FILES "${OpenAL_BINARY_DIR}/OpenALConfig.cmake"
+    install(FILES "${OpenAL_BINARY_DIR}/OpenAL-config.cmake"
         DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/OpenAL")
     if(TARGET soft_oal)
         install(TARGETS soft_oal
